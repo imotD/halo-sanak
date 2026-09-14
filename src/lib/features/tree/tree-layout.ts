@@ -24,8 +24,8 @@ export interface TreeLayoutResult {
 	bounds: { minX: number; maxX: number; minY: number; maxY: number; width: number; height: number };
 }
 
-export const CARD_WIDTH = 200;
-export const CARD_HEIGHT = 76;
+export const CARD_WIDTH = 220;
+export const CARD_HEIGHT = 80;
 export const HORIZONTAL_GAP = 32;
 export const VERTICAL_GAP = 80;
 

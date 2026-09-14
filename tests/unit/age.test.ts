@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateAge } from '../../src/lib/domain/age';
+import { calculateAge, getAgeInfo } from '../../src/lib/domain/age';
 
 describe('calculateAge', () => {
 	const fixedNow = new Date('2026-06-15T00:00:00Z');
@@ -43,5 +43,36 @@ describe('calculateAge', () => {
 			fixedNow
 		);
 		expect(age).toBeNull();
+	});
+});
+
+describe('getAgeInfo', () => {
+	const fixedNow = new Date('2026-06-15T00:00:00Z');
+
+	it('mengembalikan umur pasti dengan isEstimated: false jika tanggal lahir lengkap', () => {
+		const info = getAgeInfo({ precision: 'full', value: '1975-03-12' }, false, undefined, fixedNow);
+		expect(info).toEqual({ age: 51, isEstimated: false });
+	});
+
+	it('mengembalikan estimasi umur dengan isEstimated: true jika presisi tahun saja', () => {
+		const info = getAgeInfo({ precision: 'year', value: '1950' }, false, undefined, fixedNow);
+		// 2026 - 1950 = 76
+		expect(info).toEqual({ age: 76, isEstimated: true });
+	});
+
+	it('mengembalikan estimasi umur saat wafat jika data wafat berpresisi tahun', () => {
+		const info = getAgeInfo(
+			{ precision: 'year', value: '1950' },
+			true,
+			{ precision: 'year', value: '2018' },
+			fixedNow
+		);
+		// 2018 - 1950 = 68
+		expect(info).toEqual({ age: 68, isEstimated: true });
+	});
+
+	it('mengembalikan null jika wafat tanpa data tanggal wafat sama sekali', () => {
+		const info = getAgeInfo({ precision: 'year', value: '1950' }, true, undefined, fixedNow);
+		expect(info).toBeNull();
 	});
 });
