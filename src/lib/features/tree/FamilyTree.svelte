@@ -192,8 +192,8 @@
 			<p class="text-xs text-[var(--color-text-secondary)]">Tambah anggota pertama untuk melihat visualisasi pohon keluarga.</p>
 		</div>
 	{:else}
-		<!-- Kontrol Zoom Kanan Bawah (Mobile) / Kanan Atas (Desktop) -->
-		<div class="absolute bottom-4 right-4 md:bottom-auto md:top-4 z-10">
+		<!-- Kontrol Zoom Pojok Kanan Atas (Mobile & Desktop) -->
+		<div class="absolute top-4 right-4 z-10">
 			<TreeControls onzoomin={zoomIn} onzoomout={zoomOut} onfit={fitToScreen} />
 		</div>
 

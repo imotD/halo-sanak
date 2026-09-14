@@ -146,10 +146,15 @@
 		{/if}
 	</main>
 
-	<!-- Toast Feedback -->
+	<!-- Toast Feedback (DaisyUI toast top center) -->
 	{#if toastMessage}
-		<div class="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 px-4 py-2.5 rounded-[var(--radius-md)] bg-[var(--color-success)] text-white text-xs font-bold shadow-lg transition-transform duration-200">
-			{toastMessage}
+		<div class="toast toast-top toast-center z-50 pt-3">
+			<div class="alert alert-success shadow-lg text-white font-bold text-xs md:text-sm flex items-center gap-2 px-4 py-2.5 rounded-[var(--radius-md)] border-0">
+				<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+				</svg>
+				<span>{toastMessage}</span>
+			</div>
 		</div>
 	{/if}
 
