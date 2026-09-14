@@ -2,6 +2,7 @@ import type { ExportFile } from '$lib/schemas';
 
 /**
  * Snapshot silsilah keluarga 3 generasi untuk uji coba interaktif / demo.
+ * Semua ID member dan relationship menggunakan format UUID v4 valid.
  */
 export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 	app: 'halosanak',
@@ -86,7 +87,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 	relationships: [
 		// Spouse: Kakek & Nenek
 		{
-			id: 's-1',
+			id: 'a0000000-0000-4000-8000-000000000001',
 			type: 'spouse',
 			fromMemberId: '10000000-0000-4000-8000-000000000001',
 			toMemberId: '10000000-0000-4000-8000-000000000002',
@@ -94,7 +95,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 			createdAt: 1000
 		},
 		{
-			id: 's-2',
+			id: 'a0000000-0000-4000-8000-000000000002',
 			type: 'spouse',
 			fromMemberId: '10000000-0000-4000-8000-000000000002',
 			toMemberId: '10000000-0000-4000-8000-000000000001',
@@ -103,7 +104,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 		},
 		// Parent-Child: Kakek/Nenek -> Ayah
 		{
-			id: 'pc-1',
+			id: 'a0000000-0000-4000-8000-000000000003',
 			type: 'parent-child',
 			fromMemberId: '10000000-0000-4000-8000-000000000001',
 			toMemberId: '20000000-0000-4000-8000-000000000001',
@@ -111,7 +112,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 			createdAt: 2000
 		},
 		{
-			id: 'pc-2',
+			id: 'a0000000-0000-4000-8000-000000000004',
 			type: 'parent-child',
 			fromMemberId: '10000000-0000-4000-8000-000000000002',
 			toMemberId: '20000000-0000-4000-8000-000000000001',
@@ -120,7 +121,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 		},
 		// Spouse: Ayah & Ibu
 		{
-			id: 's-3',
+			id: 'a0000000-0000-4000-8000-000000000005',
 			type: 'spouse',
 			fromMemberId: '20000000-0000-4000-8000-000000000001',
 			toMemberId: '20000000-0000-4000-8000-000000000002',
@@ -128,7 +129,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 			createdAt: 2000
 		},
 		{
-			id: 's-4',
+			id: 'a0000000-0000-4000-8000-000000000006',
 			type: 'spouse',
 			fromMemberId: '20000000-0000-4000-8000-000000000002',
 			toMemberId: '20000000-0000-4000-8000-000000000001',
@@ -137,7 +138,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 		},
 		// Parent-Child: Ayah/Ibu -> Farhan
 		{
-			id: 'pc-3',
+			id: 'a0000000-0000-4000-8000-000000000007',
 			type: 'parent-child',
 			fromMemberId: '20000000-0000-4000-8000-000000000001',
 			toMemberId: '30000000-0000-4000-8000-000000000001',
@@ -145,7 +146,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 			createdAt: 3000
 		},
 		{
-			id: 'pc-4',
+			id: 'a0000000-0000-4000-8000-000000000008',
 			type: 'parent-child',
 			fromMemberId: '20000000-0000-4000-8000-000000000002',
 			toMemberId: '30000000-0000-4000-8000-000000000001',
@@ -154,7 +155,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 		},
 		// Parent-Child: Ayah/Ibu -> Aisyah
 		{
-			id: 'pc-5',
+			id: 'a0000000-0000-4000-8000-000000000009',
 			type: 'parent-child',
 			fromMemberId: '20000000-0000-4000-8000-000000000001',
 			toMemberId: '30000000-0000-4000-8000-000000000002',
@@ -162,7 +163,7 @@ export const SAMPLE_FAMILY_SNAPSHOT: ExportFile = {
 			createdAt: 3000
 		},
 		{
-			id: 'pc-6',
+			id: 'a0000000-0000-4000-8000-000000000010',
 			type: 'parent-child',
 			fromMemberId: '20000000-0000-4000-8000-000000000002',
 			toMemberId: '30000000-0000-4000-8000-000000000002',

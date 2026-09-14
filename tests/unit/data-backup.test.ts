@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { ExportFileSchema } from '../../src/lib/schemas';
+import { SAMPLE_FAMILY_SNAPSHOT } from '../../src/lib/features/settings/sample-data';
 
 describe('Data Backup & Schema Validation Unit Test', () => {
 	it('memvalidasi skema ExportFile yang valid', () => {
@@ -23,6 +24,15 @@ describe('Data Backup & Schema Validation Unit Test', () => {
 
 		const result = ExportFileSchema.safeParse(validData);
 		expect(result.success).toBe(true);
+	});
+
+	it('memverifikasi bahwa SAMPLE_FAMILY_SNAPSHOT lolos validasi skema 100%', () => {
+		const result = ExportFileSchema.safeParse(SAMPLE_FAMILY_SNAPSHOT);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data.members).toHaveLength(6);
+			expect(result.data.relationships).toHaveLength(10);
+		}
 	});
 
 	it('menolak file jika penanda app bukan "halosanak"', () => {

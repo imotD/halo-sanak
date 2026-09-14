@@ -66,6 +66,13 @@
 		}
 	}
 
+	function handleLoadSample() {
+		errorMessage = null;
+		pendingSnapshot = SAMPLE_FAMILY_SNAPSHOT;
+		pendingFilename = 'Data Contoh Silsilah 3 Generasi';
+		showImportConfirm = true;
+	}
+
 	async function confirmImport() {
 		if (!pendingSnapshot) return;
 		errorMessage = null;
@@ -77,7 +84,7 @@
 			ondataimported(count);
 			onclose();
 		} catch (err: unknown) {
-			errorMessage = err instanceof Error ? err.message : 'Gagal memproses import snapshot.';
+			errorMessage = err instanceof Error ? err.message : 'Gagal memproses snapshot data.';
 		} finally {
 			isProcessing = false;
 		}
@@ -101,7 +108,7 @@
 </script>
 
 <Modal {open} title="Pengaturan & Data" maxWidth="max-w-md" onclose={onclose}>
-	<div class="space-y-6">
+	<div class="space-y-5">
 		{#if errorMessage}
 			<div class="p-3 bg-[var(--color-danger)]/10 text-[var(--color-danger)] text-xs rounded-[var(--radius-md)] border border-[var(--color-danger)]/30">
 				{errorMessage}
@@ -110,15 +117,13 @@
 
 		<!-- 1. Export JSON -->
 		<div class="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-muted)] border border-[var(--color-border)] space-y-2">
-			<div class="flex items-center justify-between">
-				<div>
-					<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
-						{UI_STRINGS.settings.exportJSON}
-					</h4>
-					<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
-						Unduh seluruh silsilah keluarga dan foto profil sebagai cadangan JSON.
-					</p>
-				</div>
+			<div>
+				<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
+					{UI_STRINGS.settings.exportJSON}
+				</h4>
+				<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
+					Unduh seluruh silsilah keluarga dan foto profil sebagai cadangan JSON.
+				</p>
 			</div>
 			<button
 				type="button"
@@ -130,7 +135,7 @@
 			</button>
 		</div>
 
-		<!-- 2. Import JSON -->
+		<!-- 2. Import JSON (Murni file input) -->
 		<div class="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-muted)] border border-[var(--color-border)] space-y-2">
 			<div>
 				<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
@@ -140,35 +145,41 @@
 					Pulihkan atau pindahkan pohon keluarga dari file JSON cadangan.
 				</p>
 			</div>
-			<div class="flex flex-col sm:flex-row gap-2 mt-2">
-				<label
-					class="flex-1 py-2 px-3 text-center text-xs font-bold rounded-[var(--radius-md)] border border-[var(--color-blue-primary)] text-[var(--color-blue-primary)] hover:bg-[var(--color-blue-tint)] transition-colors cursor-pointer {isProcessing ? 'opacity-50 pointer-events-none' : ''}"
-				>
-					<span>Pilih File JSON</span>
-					<input
-						type="file"
-						accept=".json,application/json"
-						class="hidden"
-						onchange={handleFileSelect}
-						disabled={isProcessing}
-					/>
-				</label>
-				<button
-					type="button"
+			<label
+				class="block w-full mt-2 py-2 px-3 text-center text-xs font-bold rounded-[var(--radius-md)] border border-[var(--color-blue-primary)] text-[var(--color-blue-primary)] hover:bg-[var(--color-blue-tint)] transition-colors cursor-pointer {isProcessing ? 'opacity-50 pointer-events-none' : ''}"
+			>
+				<span>Pilih File JSON Cadangan</span>
+				<input
+					type="file"
+					accept=".json,application/json"
+					class="hidden"
+					onchange={handleFileSelect}
 					disabled={isProcessing}
-					class="py-2 px-3 text-xs font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-text-primary)] transition-colors"
-					onclick={() => {
-						pendingSnapshot = SAMPLE_FAMILY_SNAPSHOT;
-						pendingFilename = 'data-contoh-keluarga.json';
-						showImportConfirm = true;
-					}}
-				>
-					Muat Contoh
-				</button>
-			</div>
+				/>
+			</label>
 		</div>
 
-		<!-- 3. Hapus Semua Data (Destruktif) -->
+		<!-- 3. Data Contoh / Demo (Seksi terpisah) -->
+		<div class="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-muted)] border border-[var(--color-border)] space-y-2">
+			<div>
+				<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
+					Data Contoh Keluarga (Demo)
+				</h4>
+				<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
+					Muat contoh silsilah keluarga 3 generasi (6 anggota) untuk melihat tampilan visualisasi pohon secara instan.
+				</p>
+			</div>
+			<button
+				type="button"
+				disabled={isProcessing}
+				class="w-full mt-2 py-2 px-3 text-xs font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-text-primary)] transition-colors disabled:opacity-50"
+				onclick={handleLoadSample}
+			>
+				Muat Contoh Keluarga
+			</button>
+		</div>
+
+		<!-- 4. Hapus Semua Data (Destruktif) -->
 		<div class="p-4 rounded-[var(--radius-md)] border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/5 space-y-2">
 			<div>
 				<h4 class="text-sm font-bold text-[var(--color-danger)]">
@@ -200,11 +211,11 @@
 	{/snippet}
 </Modal>
 
-<!-- Konfirmasi Import JSON (PRD §8.5: Peringatan tegas hapus seluruh data lama) -->
+<!-- Konfirmasi Import JSON / Muat Contoh (PRD §8.5: Peringatan tegas hapus seluruh data lama) -->
 <ConfirmDialog
 	open={showImportConfirm}
-	title="Konfirmasi Import Data"
-	message={`File "${pendingFilename}" siap dimuat dengan ${pendingSnapshot?.members.length || 0} anggota keluarga. PERINGATAN: Tindakan ini secara sengaja akan MENGHAPUS SEMUA DATA LOKAL LAMA dan menggantinya secara penuh.`}
+	title="Konfirmasi Ganti Data"
+	message={`"${pendingFilename}" siap dimuat dengan ${pendingSnapshot?.members.length || 0} anggota keluarga. PERINGATAN: Tindakan ini secara sengaja akan MENGHAPUS SEMUA DATA LOKAL LAMA dan menggantinya secara penuh.`}
 	confirmText="Hapus & Ganti Data"
 	cancelText="Batal"
 	isDanger={true}
