@@ -1,0 +1,35 @@
+{
+	"name": "halosanak",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^7.0.1",
+		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"@tailwindcss/vite": "^4.3.3",
+		"@types/d3-zoom": "^3.0.8",
+		"daisyui": "^5.7.37",
+		"fake-indexeddb": "^6.2.5",
+		"svelte": "^5.56.1",
+		"svelte-check": "^4.6.0",
+		"tailwindcss": "^4.3.3",
+		"typescript": "^6.0.3",
+		"vite": "^8.0.16",
+		"vitest": "^5.0.0"
+	},
+	"dependencies": {
+		"d3-zoom": "^3.0.0",
+		"dexie": "^4.4.6",
+		"dexie-svelte-query": "^1.0.0",
+		"zod": "^4.6.4"
+	}
+}

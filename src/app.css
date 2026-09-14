@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --font-sans: 'Nanum Gothic', sans-serif;
+
+  --color-bg-base: var(--color-bg-base);
+  --color-surface: var(--color-surface);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-border-subtle: var(--color-border);
+  --color-text-main: var(--color-text-primary);
+  --color-text-muted: var(--color-text-secondary);
+  --color-blue-tint: var(--color-blue-tint);
+  --color-blue-soft: var(--color-blue-soft);
+  --color-blue-primary: var(--color-blue-primary);
+  --color-blue-primary-hover: var(--color-blue-primary-hover);
+  --color-pink-tint: var(--color-pink-tint);
+  --color-pink-primary: var(--color-pink-primary);
+  --color-accent-warm: var(--color-accent-warm);
+  --color-danger: var(--color-danger);
+  --color-success: var(--color-success);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-modal: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+:root {
+  color-scheme: light;
+  --color-bg-base: #FCFCF9;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F3F4F1;
+  --color-border: #E4E5E1;
+  --color-text-primary: #1F2420;
+  --color-text-secondary: #6B7268;
+  --color-blue-tint: #EAF4FE;
+  --color-blue-soft: #9AD0F5;
+  --color-blue-primary: #3F9AE0;
+  --color-blue-primary-hover: #2C86CC;
+  --color-pink-tint: #FDECF2;
+  --color-pink-primary: #EE93B4;
+  --color-accent-warm: #FFB84D;
+  --color-danger: #E4574B;
+  --color-success: #5FBF8B;
+}
+
+[data-theme="dark"],
+.dark {
+  color-scheme: dark;
+  --color-bg-base: #15181C;
+  --color-surface: #1E2227;
+  --color-surface-muted: #262A30;
+  --color-border: #333840;
+  --color-text-primary: #EDEFEC;
+  --color-text-secondary: #9AA0A6;
+  --color-blue-tint: #1E3A52;
+  --color-blue-soft: #6FBBF0;
+  --color-blue-primary: #6FBBF0;
+  --color-blue-primary-hover: #5aa7dc;
+  --color-pink-tint: #3A2530;
+  --color-pink-primary: #F4A6C4;
+  --color-accent-warm: #FFC670;
+  --color-danger: #F0776D;
+  --color-success: #7ED4A6;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+}
