@@ -7,6 +7,7 @@
 		replaceDatabaseWithSnapshot,
 		clearAllLocalData
 	} from './data-backup';
+	import { SAMPLE_FAMILY_SNAPSHOT } from './sample-data';
 	import type { ExportFile } from '$lib/schemas';
 	import { UI_STRINGS } from '$lib/strings';
 
@@ -139,18 +140,32 @@
 					Pulihkan atau pindahkan pohon keluarga dari file JSON cadangan.
 				</p>
 			</div>
-			<label
-				class="block w-full mt-2 py-2 px-3 text-center text-xs font-bold rounded-[var(--radius-md)] border border-[var(--color-blue-primary)] text-[var(--color-blue-primary)] hover:bg-[var(--color-blue-tint)] transition-colors cursor-pointer {isProcessing ? 'opacity-50 pointer-events-none' : ''}"
-			>
-				<span>Pilih File Cadangan JSON</span>
-				<input
-					type="file"
-					accept=".json,application/json"
-					class="hidden"
-					onchange={handleFileSelect}
+			<div class="flex flex-col sm:flex-row gap-2 mt-2">
+				<label
+					class="flex-1 py-2 px-3 text-center text-xs font-bold rounded-[var(--radius-md)] border border-[var(--color-blue-primary)] text-[var(--color-blue-primary)] hover:bg-[var(--color-blue-tint)] transition-colors cursor-pointer {isProcessing ? 'opacity-50 pointer-events-none' : ''}"
+				>
+					<span>Pilih File JSON</span>
+					<input
+						type="file"
+						accept=".json,application/json"
+						class="hidden"
+						onchange={handleFileSelect}
+						disabled={isProcessing}
+					/>
+				</label>
+				<button
+					type="button"
 					disabled={isProcessing}
-				/>
-			</label>
+					class="py-2 px-3 text-xs font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-text-primary)] transition-colors"
+					onclick={() => {
+						pendingSnapshot = SAMPLE_FAMILY_SNAPSHOT;
+						pendingFilename = 'data-contoh-keluarga.json';
+						showImportConfirm = true;
+					}}
+				>
+					Muat Contoh
+				</button>
+			</div>
 		</div>
 
 		<!-- 3. Hapus Semua Data (Destruktif) -->
