@@ -71,9 +71,14 @@
 	<header class="sticky top-0 z-20 bg-[var(--color-surface)] border-b border-[var(--color-border)] px-4 py-3 flex items-center justify-between">
 		<div class="flex items-center gap-6">
 			<div>
-				<h1 class="text-lg font-extrabold text-[var(--color-text-primary)] tracking-tight">
+				<button
+					type="button"
+					class="text-lg font-extrabold text-[var(--color-text-primary)] tracking-tight hover:text-[var(--color-blue-primary)] transition-colors cursor-pointer text-left"
+					onclick={() => (currentTab = 'tree')}
+					title="Ke Pohon Keluarga"
+				>
 					{UI_STRINGS.appName}
-				</h1>
+				</button>
 			</div>
 
 			<!-- Desktop Nav Tabs -->
@@ -101,9 +106,10 @@
 
 		<div class="flex items-center gap-2">
 			<ThemeToggle />
+			<!-- Tombol Pengaturan hanya muncul di desktop/tablet, karena di mobile sudah ada di bottom navigation -->
 			<button
 				type="button"
-				class="p-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
+				class="hidden md:inline-flex p-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
 				onclick={() => (showSettingsModal = true)}
 				aria-label={UI_STRINGS.nav.settings}
 				title={UI_STRINGS.nav.settings}
