@@ -4,8 +4,10 @@
 	import MemberList from '$lib/features/members/MemberList.svelte';
 	import MemberFormModal from '$lib/features/member-form/MemberFormModal.svelte';
 	import MemberDetailModal from '$lib/features/member-detail/MemberDetailModal.svelte';
+	import SettingsModal from '$lib/features/settings/SettingsModal.svelte';
 	import FamilyTree from '$lib/features/tree/FamilyTree.svelte';
 	import { MemberRepository } from '$lib/db/member-repository';
+	import { requestPersistentStorage } from '$lib/features/settings/storage';
 	import type { Member, Relationship } from '$lib/schemas';
 	import { UI_STRINGS } from '$lib/strings';
 
@@ -14,12 +16,14 @@
 	let members = $state<Member[]>([]);
 	let relationships = $state<Relationship[]>([]);
 
-	// State Modal Detail & Form
+	// State Modal Detail & Form & Settings
 	let selectedMemberId = $state<string | undefined>(undefined);
 	let showDetailModal = $state(false);
 
 	let showFormModal = $state(false);
 	let memberToEdit = $state<Member | undefined>(undefined);
+
+	let showSettingsModal = $state(false);
 
 	// Feedback toast
 	let toastMessage = $state<string | null>(null);
@@ -35,6 +39,7 @@
 
 	onMount(() => {
 		refreshData();
+		requestPersistentStorage();
 	});
 
 	function showToast(msg: string) {
@@ -96,6 +101,18 @@
 
 		<div class="flex items-center gap-2">
 			<ThemeToggle />
+			<button
+				type="button"
+				class="p-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
+				onclick={() => (showSettingsModal = true)}
+				aria-label={UI_STRINGS.nav.settings}
+				title={UI_STRINGS.nav.settings}
+			>
+				<svg class="w-5 h-5 text-[var(--color-text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+				</svg>
+			</button>
 			<button
 				type="button"
 				class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-blue-primary)] text-white text-xs font-bold hover:bg-[var(--color-blue-primary-hover)] transition-colors shadow-sm"
@@ -179,6 +196,18 @@
 			</svg>
 			<span>{UI_STRINGS.nav.tree}</span>
 		</button>
+
+		<button
+			type="button"
+			class="flex flex-col items-center gap-0.5 text-xs font-semibold text-[var(--color-text-secondary)]"
+			onclick={() => (showSettingsModal = true)}
+		>
+			<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+			</svg>
+			<span>{UI_STRINGS.nav.settings}</span>
+		</button>
 	</nav>
 
 	<!-- Modal Tambah / Edit Anggota -->
@@ -207,5 +236,20 @@
 			await refreshData();
 			showToast(UI_STRINGS.success.deleted);
 		}}
+	/>
+
+	<!-- Modal Pengaturan & Backup JSON (PRD §8.5) -->
+	<SettingsModal
+		open={showSettingsModal}
+		onclose={() => (showSettingsModal = false)}
+		ondataimported={async (count) => {
+			await refreshData();
+			currentTab = 'tree';
+			showToast(`Import berhasil: ${count} anggota dimuat.`);
+		}}
+		ondatacleared={async () => {
+			await refreshData();
+		}}
+		{showToast}
 	/>
 </div>

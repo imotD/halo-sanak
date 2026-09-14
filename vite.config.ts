@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-auto';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -12,6 +13,32 @@ export default defineConfig({
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
 			adapter: adapter()
+		}),
+		VitePWA({
+			registerType: 'autoUpdate',
+			manifest: {
+				name: 'HaloSanak',
+				short_name: 'HaloSanak',
+				description: 'PWA Pohon Keluarga Offline-First',
+				theme_color: '#3F9AE0',
+				background_color: '#FCFCF9',
+				display: 'standalone',
+				icons: [
+					{
+						src: 'favicon.png',
+						sizes: '192x192',
+						type: 'image/png'
+					},
+					{
+						src: 'favicon.png',
+						sizes: '512x512',
+						type: 'image/png'
+					}
+				]
+			},
+			workbox: {
+				globPatterns: ['**/*.{js,css,html,svg,png,woff2}']
+			}
 		})
 	]
 });
