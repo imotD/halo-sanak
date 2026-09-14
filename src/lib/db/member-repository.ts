@@ -1,6 +1,7 @@
 import { getDB } from './index';
 import type { Member, Relationship } from '$lib/schemas';
 import { createSymmetricSpousePairs, detectAncestorCycle, canDeleteMember } from '$lib/domain';
+import { stripReactivity } from '$lib/utils/clone';
 
 export class MemberRepository {
 	static async getAllMembers(): Promise<Member[]> {
@@ -53,12 +54,12 @@ export class MemberRepository {
 
 		await db.transaction('rw', db.members, db.relationships, async () => {
 			const existingMember = await db.members.get(memberId);
-			const fullMember: Member = {
+			const fullMember: Member = stripReactivity({
 				...memberData,
 				id: memberId,
 				createdAt: existingMember ? existingMember.createdAt : now,
 				updatedAt: now
-			};
+			});
 			await db.members.put(fullMember);
 
 			// Bersihkan relasi lama yang melibatkan member ini
@@ -81,34 +82,34 @@ export class MemberRepository {
 
 			// Simpan Ayah
 			if (relations.fatherId) {
-				await db.relationships.add({
+				await db.relationships.add(stripReactivity({
 					id: crypto.randomUUID(),
 					type: 'parent-child',
 					fromMemberId: relations.fatherId,
 					toMemberId: memberId,
 					role: 'father',
 					createdAt: now
-				});
+				}));
 			}
 
 			// Simpan Ibu
 			if (relations.motherId) {
-				await db.relationships.add({
+				await db.relationships.add(stripReactivity({
 					id: crypto.randomUUID(),
 					type: 'parent-child',
 					fromMemberId: relations.motherId,
 					toMemberId: memberId,
 					role: 'mother',
 					createdAt: now
-				});
+				}));
 			}
 
 			// Simpan Pasangan (Simetris 2-arah)
 			if (relations.spouseIds && relations.spouseIds.length > 0) {
 				for (const spouseId of relations.spouseIds) {
 					const [edgeA, edgeB] = createSymmetricSpousePairs(memberId, spouseId);
-					await db.relationships.add(edgeA);
-					await db.relationships.add(edgeB);
+					await db.relationships.add(stripReactivity(edgeA));
+					await db.relationships.add(stripReactivity(edgeB));
 				}
 			}
 
@@ -116,14 +117,14 @@ export class MemberRepository {
 			if (relations.childrenIds && relations.childrenIds.length > 0) {
 				const role = memberData.gender === 'Laki-laki' ? 'father' : 'mother';
 				for (const childId of relations.childrenIds) {
-					await db.relationships.add({
+					await db.relationships.add(stripReactivity({
 						id: crypto.randomUUID(),
 						type: 'parent-child',
 						fromMemberId: memberId,
 						toMemberId: childId,
 						role,
 						createdAt: now
-					});
+					}));
 				}
 			}
 		});

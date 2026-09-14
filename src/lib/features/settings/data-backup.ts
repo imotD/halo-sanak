@@ -1,5 +1,6 @@
 import { getDB } from '$lib/db';
 import { ExportFileSchema, type ExportFile } from '$lib/schemas';
+import { stripReactivity } from '$lib/utils/clone';
 
 /**
  * Mengunduh seluruh data dalam format JSON: halosanak-<YYYY-MM-DD>.json (PRD §8.5)
@@ -63,21 +64,25 @@ export async function parseAndValidateBackupFile(file: File): Promise<ExportFile
 export async function replaceDatabaseWithSnapshot(snapshot: ExportFile): Promise<number> {
 	const db = getDB();
 
+	// Bersihkan seluruh Svelte 5 reactive proxy dan field undefined agar aman di IndexedDB Structured Clone
+	const cleanMembers = stripReactivity(snapshot.members);
+	const cleanRelationships = stripReactivity(snapshot.relationships);
+
 	await db.transaction('rw', db.members, db.relationships, async () => {
 		// Hapus seluruh data lama
 		await db.members.clear();
 		await db.relationships.clear();
 
 		// Masukkan data baru
-		if (snapshot.members.length > 0) {
-			await db.members.bulkAdd(snapshot.members);
+		if (cleanMembers.length > 0) {
+			await db.members.bulkAdd(cleanMembers);
 		}
-		if (snapshot.relationships.length > 0) {
-			await db.relationships.bulkAdd(snapshot.relationships);
+		if (cleanRelationships.length > 0) {
+			await db.relationships.bulkAdd(cleanRelationships);
 		}
 	});
 
-	return snapshot.members.length;
+	return cleanMembers.length;
 }
 
 /**
