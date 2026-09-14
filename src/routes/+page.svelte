@@ -4,13 +4,15 @@
 	import MemberList from '$lib/features/members/MemberList.svelte';
 	import MemberFormModal from '$lib/features/member-form/MemberFormModal.svelte';
 	import MemberDetailModal from '$lib/features/member-detail/MemberDetailModal.svelte';
+	import FamilyTree from '$lib/features/tree/FamilyTree.svelte';
 	import { MemberRepository } from '$lib/db/member-repository';
-	import type { Member } from '$lib/schemas';
+	import type { Member, Relationship } from '$lib/schemas';
 	import { UI_STRINGS } from '$lib/strings';
 
 	// Navigasi Tab: 'tree' | 'members' | 'settings'
-	let currentTab = $state<'tree' | 'members' | 'settings'>('members');
+	let currentTab = $state<'tree' | 'members' | 'settings'>('tree');
 	let members = $state<Member[]>([]);
+	let relationships = $state<Relationship[]>([]);
 
 	// State Modal Detail & Form
 	let selectedMemberId = $state<string | undefined>(undefined);
@@ -25,6 +27,7 @@
 	async function refreshData() {
 		try {
 			members = await MemberRepository.getAllMembers();
+			relationships = await MemberRepository.getAllRelationships();
 		} catch (err) {
 			console.error(err);
 		}
@@ -112,25 +115,11 @@
 				onaddclick={openAddModal}
 			/>
 		{:else if currentTab === 'tree'}
-			<!-- Placeholder Sprint 3 Pohon -->
-			<div class="py-20 text-center space-y-3">
-				<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--color-blue-tint)] text-[var(--color-blue-primary)] mb-2">
-					<svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="1.75"
-							d="M4 6h16M4 12h8m-8 6h16"
-						/>
-					</svg>
-				</div>
-				<h3 class="text-lg font-bold text-[var(--color-text-primary)]">
-					Visualisasi Pohon Keluarga SVG
-				</h3>
-				<p class="text-xs text-[var(--color-text-secondary)] max-w-sm mx-auto">
-					Fitur tampilan pohon interaktif d3-zoom siap dibangun pada Sprint 3.
-				</p>
-			</div>
+			<FamilyTree
+				{members}
+				{relationships}
+				onselectmember={openDetail}
+			/>
 		{/if}
 	</main>
 
