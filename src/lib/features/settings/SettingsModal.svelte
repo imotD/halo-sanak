@@ -110,7 +110,7 @@
 <Modal {open} title="Pengaturan & Data" maxWidth="max-w-md" onclose={onclose}>
 	<div class="space-y-5">
 		{#if errorMessage}
-			<div class="p-3 bg-[var(--color-danger)]/10 text-[var(--color-danger)] text-xs rounded-[var(--radius-md)] border border-[var(--color-danger)]/30">
+			<div class="p-3 bg-danger/10 text-danger text-xs rounded-[var(--radius-md)] border border-danger/30">
 				{errorMessage}
 			</div>
 		{/if}
@@ -180,7 +180,7 @@
 		</div>
 
 		<!-- 4. Hapus Semua Data (Destruktif) -->
-		<div class="p-4 rounded-[var(--radius-md)] border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/5 space-y-2">
+		<div class="p-4 rounded-[var(--radius-md)] border border-danger/30 bg-danger/5 space-y-2">
 			<div>
 				<h4 class="text-sm font-bold text-[var(--color-danger)]">
 					{UI_STRINGS.settings.clearAll}

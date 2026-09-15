@@ -121,12 +121,12 @@
 	}
 </script>
 
-<Modal {open} maxWidth="max-w-xl" onclose={onclose}>
+<Modal {open} title={UI_STRINGS.common.detail} maxWidth="max-w-xl" onclose={onclose}>
 	{#if currentMember}
 		<div class="space-y-6">
 			<!-- Pesan Error jika hapus ditolak -->
 			{#if deleteErrorMessage}
-				<div class="p-3 bg-[var(--color-danger)]/10 text-[var(--color-danger)] text-sm rounded-[var(--radius-md)] border border-[var(--color-danger)]/30">
+				<div class="p-3 bg-danger/10 text-danger text-sm rounded-[var(--radius-md)] border border-danger/30">
 					{deleteErrorMessage}
 				</div>
 			{/if}
@@ -314,7 +314,7 @@
 		<div class="flex items-center justify-between w-full">
 			<button
 				type="button"
-				class="px-3 py-1.5 text-xs font-semibold text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10 rounded-[var(--radius-md)] transition-colors"
+				class="px-3 py-1.5 text-xs font-semibold text-[var(--color-danger)] hover:bg-danger/10 rounded-[var(--radius-md)] transition-colors"
 				onclick={handleDeleteRequest}
 			>
 				{UI_STRINGS.common.delete}

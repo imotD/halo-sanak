@@ -142,7 +142,7 @@ Pengguna dapat:
 - Domisili, maksimum satu baris.
 - Perlakuan grayscale jika wafat.
 - Warna lembut berbeda untuk avatar/inisial Laki-laki dan Perempuan.
-- Tidak menampilkan umur, pekerjaan, atau tanggal.
+- Tidak menampilkan pekerjaan, atau tanggal.
 
 ### 8.2 Anggota
 

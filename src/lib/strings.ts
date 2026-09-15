@@ -14,7 +14,8 @@ export const UI_STRINGS = {
 		edit: 'Edit',
 		back: 'Kembali',
 		loading: 'Memproses...',
-		close: 'Tutup'
+		close: 'Tutup',
+		detail: 'Detail Anggota'
 	},
 	member: {
 		fullName: 'Nama Lengkap',

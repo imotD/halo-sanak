@@ -24,34 +24,35 @@
 </script>
 
 <div
-	class="w-full h-full p-3 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-blue-soft)]/50 shadow-[var(--shadow-card)] flex items-center gap-3 select-none transition-transform duration-100 active:scale-[0.97] hover:border-[var(--color-blue-primary)]"
-	style="width: {width}px; height: {height}px;"
+	class="w-full h-full p-3 rounded-2xl bg-[var(--color-surface)] border border-blue-soft/50 shadow-[var(--shadow-card)] select-none overflow-hidden hover:border-[var(--color-blue-primary)]"
+	style="width: {width}px; height: {height}px; box-sizing: border-box;"
+	title="Detail: {member.fullName} (Klik untuk melihat detail)"
 >
-	<Avatar
-		name={member.fullName}
-		gender={member.gender}
-		photoUrl={member.photoUrl}
-		isDeceased={member.isDeceased}
-		size="sm"
-	/>
+	<div style="display: table; width: 100%; height: 100%; table-layout: fixed;">
+		<div style="display: table-cell; vertical-align: middle; width: 36px;">
+			<Avatar
+				name={member.fullName}
+				gender={member.gender}
+				photoUrl={member.photoUrl}
+				isDeceased={member.isDeceased}
+				size="sm"
+			/>
+		</div>
 
-	<div class="flex-1 min-w-0">
-		<!-- 1. Nama Anggota: Tebal/Bold 700, kontras gelap pekat -->
-		<h5
-			class="text-[14px] font-bold text-[var(--color-text-primary)] line-clamp-1 leading-snug tracking-tight {member.isDeceased
-				? 'opacity-85'
-				: ''}"
-		>
-			{member.fullName}
-		</h5>
+		<div style="display: table-cell; vertical-align: middle; padding-left: 10px; overflow: hidden;">
+			<!-- 1. Nama Anggota: Tebal/Bold 700, kontras gelap pekat -->
+			<h5
+				class="text-sm font-bold leading-snug tracking-tight truncate {member.isDeceased
+					? 'text-[var(--color-text-secondary)]'
+					: 'text-[var(--color-text-primary)]'}"
+			>
+				{member.fullName}
+			</h5>
 
-		<!-- 2. Subteks: Tipis/Regular 400, abu-abu lembut -->
-		<p class="text-[12px] font-normal text-[var(--color-text-secondary)] truncate mt-0.5 flex items-center gap-1.5">
-			<span>{member.domicile}</span>
-			{#if ageText}
-				<span class="opacity-40">•</span>
-				<span>{ageText}</span>
-			{/if}
-		</p>
+			<!-- 2. Subteks: Tipis/Regular 400, abu-abu lembut -->
+			<p class="text-xs font-normal text-[var(--color-text-secondary)] truncate mt-0.5">
+				<span>{member.domicile}</span>{#if ageText}<span class="mx-1 text-[var(--color-border)]">•</span><span>{ageText}</span>{/if}
+			</p>
+		</div>
 	</div>
 </div>

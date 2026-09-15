@@ -14,6 +14,7 @@
 <button
 	type="button"
 	class="w-full text-left p-4 rounded-[var(--radius-md)] bg-[var(--color-surface)] border border-[var(--color-border)] shadow-[var(--shadow-card)] hover:border-[var(--color-blue-soft)] transition-all active:scale-[0.97] flex items-center gap-3.5 group cursor-pointer"
+	title="Detail: {member.fullName}"
 	{onclick}
 >
 	<Avatar

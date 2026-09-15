@@ -171,6 +171,8 @@
 						role="button"
 						tabindex="0"
 						class="w-full h-full cursor-pointer focus:outline-none"
+						title="Detail: {node.member.fullName}"
+						aria-label="Detail: {node.member.fullName}"
 						onclick={(e) => handleNodeClick(node.member.id, e)}
 						onkeydown={(e) => {
 							if (e.key === 'Enter' || e.key === ' ') {
@@ -187,7 +189,7 @@
 
 	<!-- Overlay State Kosong bila belum ada anggota -->
 	{#if members.length === 0}
-		<div class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center text-center p-6 space-y-2 bg-[var(--color-bg-base)]/80 backdrop-blur-[1px]">
+		<div class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center text-center p-6 space-y-2 bg-bg-base/80 backdrop-blur-[1px]">
 			<p class="text-sm font-bold text-[var(--color-text-primary)]">Belum ada data keluarga</p>
 			<p class="text-xs text-[var(--color-text-secondary)]">Tambah anggota pertama untuk melihat visualisasi pohon keluarga.</p>
 		</div>
@@ -198,7 +200,7 @@
 		</div>
 
 		<!-- Jumlah Anggota di Kiri Bawah (PRD §10) -->
-		<div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 bg-[var(--color-surface)]/90 backdrop-blur-[2px] border border-[var(--color-border)] rounded-[var(--radius-sm)] text-xs font-semibold text-[var(--color-text-secondary)] shadow-sm">
+		<div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 bg-surface/90 backdrop-blur-[2px] border border-[var(--color-border)] rounded-[var(--radius-sm)] text-xs font-semibold text-[var(--color-text-secondary)] shadow-sm">
 			{members.length} Anggota Keluarga
 		</div>
 	{/if}

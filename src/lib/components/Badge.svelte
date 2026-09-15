@@ -12,8 +12,8 @@
 		male: 'bg-[var(--color-blue-tint)] text-[var(--color-blue-primary)]',
 		female: 'bg-[var(--color-pink-tint)] text-[var(--color-pink-primary)]',
 		neutral: 'bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)]',
-		danger: 'bg-[var(--color-danger)]/15 text-[var(--color-danger)]',
-		success: 'bg-[var(--color-success)]/15 text-[var(--color-success)]'
+		danger: 'bg-danger/15 text-danger',
+		success: 'bg-success/15 text-success'
 	}[variant]);
 </script>
 

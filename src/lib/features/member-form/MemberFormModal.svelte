@@ -205,7 +205,7 @@
 	onclose={handleCloseRequest}
 >
 	{#if errorMessage}
-		<div class="mb-4 p-3 bg-[var(--color-danger)]/10 text-[var(--color-danger)] text-sm rounded-[var(--radius-md)] border border-[var(--color-danger)]/30">
+		<div class="mb-4 p-3 bg-danger/10 text-danger text-sm rounded-[var(--radius-md)] border border-danger/30">
 			{errorMessage}
 		</div>
 	{/if}

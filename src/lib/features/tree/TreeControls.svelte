@@ -21,7 +21,7 @@
 		</svg>
 	</button>
 
-	<div class="h-[1px] bg-[var(--color-border)]"></div>
+	<div class="h-px bg-[var(--color-border)]"></div>
 
 	<button
 		type="button"
@@ -35,7 +35,7 @@
 		</svg>
 	</button>
 
-	<div class="h-[1px] bg-[var(--color-border)]"></div>
+	<div class="h-px bg-[var(--color-border)]"></div>
 
 	<!-- Pas ke Layar: Ikon tanpa teks dengan label aksesibilitas (PRD §10) -->
 	<button
