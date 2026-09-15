@@ -7,7 +7,10 @@
   --color-bg-base: var(--color-bg-base);
   --color-surface: var(--color-surface);
   --color-surface-muted: var(--color-surface-muted);
+  --color-border: var(--color-border);
   --color-border-subtle: var(--color-border);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
   --color-text-main: var(--color-text-primary);
   --color-text-muted: var(--color-text-secondary);
   --color-blue-tint: var(--color-blue-tint);

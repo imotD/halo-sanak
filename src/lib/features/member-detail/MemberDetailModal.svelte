@@ -126,7 +126,7 @@
 		<div class="space-y-6">
 			<!-- Pesan Error jika hapus ditolak -->
 			{#if deleteErrorMessage}
-				<div class="p-3 bg-danger/10 text-danger text-sm rounded-[var(--radius-md)] border border-danger/30">
+				<div class="p-3 bg-danger/10 text-danger text-sm rounded-md border border-danger/30">
 					{deleteErrorMessage}
 				</div>
 			{/if}
@@ -141,10 +141,10 @@
 					size="lg"
 				/>
 				<div class="flex-1 min-w-0">
-					<h2 class="text-xl md:text-2xl font-extrabold text-[var(--color-text-primary)] truncate">
+					<h2 class="text-xl md:text-2xl font-extrabold text-text-primary truncate">
 						{currentMember.fullName}
 					</h2>
-					<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
+					<p class="text-xs text-text-secondary mt-0.5">
 						{currentMember.domicile}
 					</p>
 
@@ -164,22 +164,22 @@
 			</div>
 
 			<!-- 3. Data Dasar (Tanggal Lahir, Usia, Pekerjaan) -->
-			<div class="grid grid-cols-2 gap-3 p-4 bg-[var(--color-surface-muted)] rounded-[var(--radius-md)] border border-[var(--color-border)] text-xs">
+			<div class="grid grid-cols-2 gap-3 p-4 bg-surface-muted rounded-md border border-border text-xs">
 				<div>
-					<span class="block text-[var(--color-text-secondary)] font-medium">
+					<span class="block text-text-secondary font-medium">
 						{UI_STRINGS.member.birthDate}
 					</span>
-					<span class="font-bold text-[var(--color-text-primary)]">
+					<span class="font-bold text-text-primary">
 						{currentMember.birthDate ? currentMember.birthDate.value : '—'}
 					</span>
 				</div>
 
 				{#if currentMember.isDeceased}
 					<div>
-						<span class="block text-[var(--color-text-secondary)] font-medium">
+						<span class="block text-text-secondary font-medium">
 							{UI_STRINGS.member.deathDate}
 						</span>
-						<span class="font-bold text-[var(--color-text-primary)]">
+						<span class="font-bold text-text-primary">
 							{currentMember.deathDate ? currentMember.deathDate.value : '—'}
 						</span>
 					</div>
@@ -187,10 +187,10 @@
 
 				{#if age !== null}
 					<div>
-						<span class="block text-[var(--color-text-secondary)] font-medium">
+						<span class="block text-text-secondary font-medium">
 							{currentMember.isDeceased ? 'Usia saat wafat' : UI_STRINGS.member.age}
 						</span>
-						<span class="font-bold text-[var(--color-text-primary)]">
+						<span class="font-bold text-text-primary">
 							{age} {UI_STRINGS.member.yearsOld}
 						</span>
 					</div>
@@ -198,10 +198,10 @@
 
 				{#if currentMember.occupation}
 					<div>
-						<span class="block text-[var(--color-text-secondary)] font-medium">
+						<span class="block text-text-secondary font-medium">
 							{UI_STRINGS.member.occupation}
 						</span>
-						<span class="font-bold text-[var(--color-text-primary)]">
+						<span class="font-bold text-text-primary">
 							{currentMember.occupation}
 						</span>
 					</div>
@@ -211,71 +211,71 @@
 			<!-- 4. Deskripsi -->
 			{#if currentMember.description}
 				<div>
-					<h4 class="text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+					<h4 class="text-xs font-semibold text-text-secondary mb-1">
 						{UI_STRINGS.member.description}
 					</h4>
-					<p class="text-sm text-[var(--color-text-primary)] leading-relaxed bg-[var(--color-surface)] p-3 rounded-[var(--radius-md)] border border-[var(--color-border)]">
+					<p class="text-sm text-text-primary leading-relaxed bg-surface p-3 rounded-md border border-border">
 						{currentMember.description}
 					</p>
 				</div>
 			{/if}
 
 			<!-- 5. Relasi (Klik nama membuka detail mereka - PRD §8.3) -->
-			<div class="space-y-4 pt-2 border-t border-[var(--color-border)]">
-				<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
+			<div class="space-y-4 pt-2 border-t border-border">
+				<h4 class="text-sm font-bold text-text-primary">
 					Relasi Keluarga
 				</h4>
 
 				<!-- Orang Tua -->
 				<div class="grid grid-cols-2 gap-3">
-					<div class="p-3 border border-[var(--color-border)] rounded-[var(--radius-md)]">
-						<span class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+					<div class="p-3 border border-border rounded-md">
+						<span class="block text-xs font-semibold text-text-secondary mb-1">
 							{UI_STRINGS.relations.father}
 						</span>
 						{#if father}
 							<button
 								type="button"
-								class="text-sm font-bold text-[var(--color-blue-primary)] hover:underline text-left block truncate"
+								class="text-sm font-bold text-blue-primary hover:underline text-left block truncate"
 								onclick={() => onselectmember(father!.id)}
 							>
 								{father.fullName}
 							</button>
 						{:else}
-							<span class="text-xs text-[var(--color-text-secondary)] italic">—</span>
+							<span class="text-xs text-text-secondary italic">—</span>
 						{/if}
 					</div>
 
-					<div class="p-3 border border-[var(--color-border)] rounded-[var(--radius-md)]">
-						<span class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+					<div class="p-3 border border-border rounded-md">
+						<span class="block text-xs font-semibold text-text-secondary mb-1">
 							{UI_STRINGS.relations.mother}
 						</span>
 						{#if mother}
 							<button
 								type="button"
-								class="text-sm font-bold text-[var(--color-pink-primary)] hover:underline text-left block truncate"
+								class="text-sm font-bold text-pink-primary hover:underline text-left block truncate"
 								onclick={() => onselectmember(mother!.id)}
 							>
 								{mother.fullName}
 							</button>
 						{:else}
-							<span class="text-xs text-[var(--color-text-secondary)] italic">—</span>
+							<span class="text-xs text-text-secondary italic">—</span>
 						{/if}
 					</div>
 				</div>
 
 				<!-- Pasangan -->
-				<div class="p-3 border border-[var(--color-border)] rounded-[var(--radius-md)]">
-					<span class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-2">
+				<div class="p-3 border border-border rounded-md">
+					<span class="block text-xs font-semibold text-text-secondary mb-2">
 						{UI_STRINGS.relations.spouse}
 					</span>
 					{#if spouses.length === 0}
-						<span class="text-xs text-[var(--color-text-secondary)] italic">—</span>
+						<span class="text-xs text-text-secondary italic">—</span>
 					{:else}
 						<div class="flex flex-wrap gap-2">
 							{#each spouses as spouse}
 								<button
 									type="button"
-									class="px-2.5 py-1 text-xs font-bold rounded-[var(--radius-sm)] border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] text-[var(--color-text-primary)] transition-colors"
+									class="px-2.5 py-1 text-xs font-bold rounded-sm border border-border hover:bg-surface-muted text-text-primary transition-colors"
 									onclick={() => onselectmember(spouse.id)}
 								>
 									{spouse.fullName}
@@ -286,18 +286,18 @@
 				</div>
 
 				<!-- Anak -->
-				<div class="p-3 border border-[var(--color-border)] rounded-[var(--radius-md)]">
-					<span class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-2">
+				<div class="p-3 border border-border rounded-md">
+					<span class="block text-xs font-semibold text-text-secondary mb-2">
 						{UI_STRINGS.relations.children}
 					</span>
 					{#if children.length === 0}
-						<span class="text-xs text-[var(--color-text-secondary)] italic">—</span>
+						<span class="text-xs text-text-secondary italic">—</span>
 					{:else}
 						<div class="flex flex-wrap gap-2">
 							{#each children as child}
 								<button
 									type="button"
-									class="px-2.5 py-1 text-xs font-bold rounded-[var(--radius-sm)] border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] text-[var(--color-text-primary)] transition-colors"
+									class="px-2.5 py-1 text-xs font-bold rounded-sm border border-border hover:bg-surface-muted text-text-primary transition-colors"
 									onclick={() => onselectmember(child.id)}
 								>
 									{child.fullName}
@@ -314,7 +314,7 @@
 		<div class="flex items-center justify-between w-full">
 			<button
 				type="button"
-				class="px-3 py-1.5 text-xs font-semibold text-[var(--color-danger)] hover:bg-danger/10 rounded-[var(--radius-md)] transition-colors"
+				class="px-3 py-1.5 text-xs font-semibold text-danger hover:bg-danger/10 rounded-md transition-colors"
 				onclick={handleDeleteRequest}
 			>
 				{UI_STRINGS.common.delete}
@@ -322,7 +322,7 @@
 			<div class="flex items-center gap-2">
 				<button
 					type="button"
-					class="px-4 py-2 text-xs font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] text-[var(--color-text-primary)] transition-colors"
+					class="px-4 py-2 text-xs font-semibold rounded-md border border-border hover:bg-surface-muted text-text-primary transition-colors"
 					onclick={onclose}
 				>
 					{UI_STRINGS.common.close}
@@ -330,7 +330,7 @@
 				{#if currentMember}
 					<button
 						type="button"
-						class="px-4 py-2 text-xs font-semibold rounded-[var(--radius-md)] bg-[var(--color-blue-primary)] text-white hover:bg-[var(--color-blue-primary-hover)] transition-colors"
+						class="px-4 py-2 text-xs font-semibold rounded-md bg-blue-primary text-white hover:bg-blue-primary-hover transition-colors"
 						onclick={() => onedit(currentMember!)}
 					>
 						{UI_STRINGS.common.edit}

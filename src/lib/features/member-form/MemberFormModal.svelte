@@ -205,7 +205,7 @@
 	onclose={handleCloseRequest}
 >
 	{#if errorMessage}
-		<div class="mb-4 p-3 bg-danger/10 text-danger text-sm rounded-[var(--radius-md)] border border-danger/30">
+		<div class="mb-4 p-3 bg-danger/10 text-danger text-sm rounded-md border border-danger/30">
 			{errorMessage}
 		</div>
 	{/if}
@@ -213,17 +213,17 @@
 	<form id="member-form" onsubmit={handleSubmit} class="space-y-5">
 		<!-- 1. Foto -->
 		<div>
-			<label for="profile-photo-input" class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+			<label for="profile-photo-input" class="block text-xs font-semibold text-text-secondary mb-1">
 				{UI_STRINGS.member.photo} (WebP / JPG / PNG)
 			</label>
 			<div class="flex items-center gap-4">
 				{#if photoUrl}
-					<div class="w-14 h-14 rounded-full overflow-hidden border border-[var(--color-border)]">
+					<div class="w-14 h-14 rounded-full overflow-hidden border border-border">
 						<img src={photoUrl} alt="Preview" class="w-full h-full object-cover" />
 					</div>
 					<button
 						type="button"
-						class="text-xs text-[var(--color-danger)] hover:underline"
+						class="text-xs text-danger hover:underline"
 						onclick={() => { photoUrl = undefined; isDirty = true; }}
 					>
 						Hapus Foto
@@ -234,14 +234,14 @@
 					type="file"
 					accept="image/*"
 					onchange={handlePhotoUpload}
-					class="text-xs text-[var(--color-text-secondary)] file:mr-3 file:py-1.5 file:px-3 file:rounded-[var(--radius-sm)] file:border-0 file:text-xs file:font-semibold file:bg-[var(--color-surface-muted)] file:text-[var(--color-text-primary)] hover:file:bg-[var(--color-blue-tint)]"
+					class="text-xs text-text-secondary file:mr-3 file:py-1.5 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-semibold file:bg-surface-muted file:text-text-primary hover:file:bg-blue-tint"
 				/>
 			</div>
 		</div>
 
 		<!-- 2. Nama Lengkap -->
 		<div>
-			<label for="member-fullname-input" class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+			<label for="member-fullname-input" class="block text-xs font-semibold text-text-secondary mb-1">
 				{UI_STRINGS.member.fullName} *
 			</label>
 			<input
@@ -250,31 +250,31 @@
 				bind:value={fullName}
 				oninput={() => (isDirty = true)}
 				required
-				class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+				class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 				placeholder="Contoh: Ahmad Yani"
 			/>
 		</div>
 
 		<!-- 3. Jenis Kelamin (Dua tombol eksplisit - PRD §8.4) -->
 		<div>
-			<span class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+			<span class="block text-xs font-semibold text-text-secondary mb-1">
 				{UI_STRINGS.member.gender} *
 			</span>
 			<div class="grid grid-cols-2 gap-2">
 				<button
 					type="button"
-					class="py-2 px-3 text-sm font-semibold rounded-[var(--radius-md)] border transition-colors {gender === 'Laki-laki'
-						? 'bg-[var(--color-blue-tint)] text-[var(--color-blue-primary)] border-[var(--color-blue-primary)]'
-						: 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border)]'}"
+					class="py-2 px-3 text-sm font-semibold rounded-md border transition-colors {gender === 'Laki-laki'
+						? 'bg-blue-tint text-blue-primary border-blue-primary'
+						: 'bg-surface text-text-secondary border-border'}"
 					onclick={() => { gender = 'Laki-laki'; isDirty = true; }}
 				>
 					{UI_STRINGS.member.male}
 				</button>
 				<button
 					type="button"
-					class="py-2 px-3 text-sm font-semibold rounded-[var(--radius-md)] border transition-colors {gender === 'Perempuan'
-						? 'bg-[var(--color-pink-tint)] text-[var(--color-pink-primary)] border-[var(--color-pink-primary)]'
-						: 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border-[var(--color-border)]'}"
+					class="py-2 px-3 text-sm font-semibold rounded-md border transition-colors {gender === 'Perempuan'
+						? 'bg-pink-tint text-pink-primary border-pink-primary'
+						: 'bg-surface text-text-secondary border-border'}"
 					onclick={() => { gender = 'Perempuan'; isDirty = true; }}
 				>
 					{UI_STRINGS.member.female}
@@ -284,7 +284,7 @@
 
 		<!-- 4. Domisili -->
 		<div>
-			<label for="member-domicile-input" class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+			<label for="member-domicile-input" class="block text-xs font-semibold text-text-secondary mb-1">
 				{UI_STRINGS.member.domicile} *
 			</label>
 			<input
@@ -293,27 +293,27 @@
 				bind:value={domicile}
 				oninput={() => (isDirty = true)}
 				required
-				class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+				class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 				placeholder="Contoh: Padang, Sumatera Barat"
 			/>
 		</div>
 
 		<!-- 5. Tanggal Lahir (Presisi: Tanggal Lengkap atau Tahun Saja) -->
 		<div>
-			<label for="birth-date-value-input" class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+			<label for="birth-date-value-input" class="block text-xs font-semibold text-text-secondary mb-1">
 				{UI_STRINGS.member.birthDate}
 			</label>
 			<div class="flex gap-2 mb-2">
 				<button
 					type="button"
-					class="px-2.5 py-1 text-xs font-semibold rounded-[var(--radius-sm)] border {birthPrecision === 'full' ? 'bg-[var(--color-blue-primary)] text-white border-[var(--color-blue-primary)]' : 'border-[var(--color-border)] text-[var(--color-text-secondary)]'}"
+					class="px-2.5 py-1 text-xs font-semibold rounded-sm border {birthPrecision === 'full' ? 'bg-blue-primary text-white border-blue-primary' : 'border-border text-text-secondary'}"
 					onclick={() => { birthPrecision = 'full'; isDirty = true; }}
 				>
 					Tanggal Lengkap
 				</button>
 				<button
 					type="button"
-					class="px-2.5 py-1 text-xs font-semibold rounded-[var(--radius-sm)] border {birthPrecision === 'year' ? 'bg-[var(--color-blue-primary)] text-white border-[var(--color-blue-primary)]' : 'border-[var(--color-border)] text-[var(--color-text-secondary)]'}"
+					class="px-2.5 py-1 text-xs font-semibold rounded-sm border {birthPrecision === 'year' ? 'bg-blue-primary text-white border-blue-primary' : 'border-border text-text-secondary'}"
 					onclick={() => { birthPrecision = 'year'; isDirty = true; }}
 				>
 					Tahun Saja
@@ -325,7 +325,7 @@
 					type="date"
 					bind:value={birthDateValue}
 					oninput={() => (isDirty = true)}
-					class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+					class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 				/>
 			{:else}
 				<input
@@ -336,13 +336,13 @@
 					placeholder="Contoh: 1980"
 					bind:value={birthDateValue}
 					oninput={() => (isDirty = true)}
-					class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+					class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 				/>
 			{/if}
 		</div>
 
 		<!-- 6. Status Wafat & Tanggal Wafat -->
-		<div class="p-3 border border-[var(--color-border)] rounded-[var(--radius-md)] bg-[var(--color-surface-muted)]">
+		<div class="p-3 border border-border rounded-md bg-surface-muted">
 			<label class="flex items-center gap-3 cursor-pointer">
 				<input
 					type="checkbox"
@@ -350,25 +350,25 @@
 					onchange={() => (isDirty = true)}
 					class="checkbox checkbox-sm"
 				/>
-				<span class="text-sm font-semibold text-[var(--color-text-primary)]">{UI_STRINGS.member.isDeceased}</span>
+				<span class="text-sm font-semibold text-text-primary">{UI_STRINGS.member.isDeceased}</span>
 			</label>
 
 			{#if isDeceased}
-				<div class="mt-3 pt-3 border-t border-[var(--color-border)]">
-					<label for="death-date-value-input" class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+				<div class="mt-3 pt-3 border-t border-border">
+					<label for="death-date-value-input" class="block text-xs font-semibold text-text-secondary mb-1">
 						{UI_STRINGS.member.deathDate}
 					</label>
 					<div class="flex gap-2 mb-2">
 						<button
 							type="button"
-							class="px-2.5 py-1 text-xs font-semibold rounded-[var(--radius-sm)] border {deathPrecision === 'full' ? 'bg-[var(--color-blue-primary)] text-white border-[var(--color-blue-primary)]' : 'border-[var(--color-border)] text-[var(--color-text-secondary)]'}"
+							class="px-2.5 py-1 text-xs font-semibold rounded-sm border {deathPrecision === 'full' ? 'bg-blue-primary text-white border-blue-primary' : 'border-border text-text-secondary'}"
 							onclick={() => { deathPrecision = 'full'; isDirty = true; }}
 						>
 							Tanggal Lengkap
 						</button>
 						<button
 							type="button"
-							class="px-2.5 py-1 text-xs font-semibold rounded-[var(--radius-sm)] border {deathPrecision === 'year' ? 'bg-[var(--color-blue-primary)] text-white border-[var(--color-blue-primary)]' : 'border-[var(--color-border)] text-[var(--color-text-secondary)]'}"
+							class="px-2.5 py-1 text-xs font-semibold rounded-sm border {deathPrecision === 'year' ? 'bg-blue-primary text-white border-blue-primary' : 'border-border text-text-secondary'}"
 							onclick={() => { deathPrecision = 'year'; isDirty = true; }}
 						>
 							Tahun Saja
@@ -380,7 +380,7 @@
 							type="date"
 							bind:value={deathDateValue}
 							oninput={() => (isDirty = true)}
-							class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+							class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 						/>
 					{:else}
 						<input
@@ -391,7 +391,7 @@
 							placeholder="Contoh: 2020"
 							bind:value={deathDateValue}
 							oninput={() => (isDirty = true)}
-							class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+							class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 						/>
 					{/if}
 				</div>
@@ -400,7 +400,7 @@
 
 		<!-- 7. Pekerjaan -->
 		<div>
-			<label for="member-occupation-input" class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+			<label for="member-occupation-input" class="block text-xs font-semibold text-text-secondary mb-1">
 				{UI_STRINGS.member.occupation}
 			</label>
 			<input
@@ -408,14 +408,14 @@
 				type="text"
 				bind:value={occupation}
 				oninput={() => (isDirty = true)}
-				class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+				class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 				placeholder="Contoh: Guru, Wiraswasta"
 			/>
 		</div>
 
 		<!-- 8. Deskripsi -->
 		<div>
-			<label for="member-description-input" class="block text-xs font-semibold text-[var(--color-text-secondary)] mb-1">
+			<label for="member-description-input" class="block text-xs font-semibold text-text-secondary mb-1">
 				{UI_STRINGS.member.description} (Maks 1.000 karakter)
 			</label>
 			<textarea
@@ -424,24 +424,24 @@
 				maxlength="1000"
 				bind:value={description}
 				oninput={() => (isDirty = true)}
-				class="w-full px-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+				class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 				placeholder="Catatan tambahan seputar anggota keluarga ini..."
 			></textarea>
 		</div>
 
 		<!-- 9. Bagian Relasi (Bisa dibuka/tutup) -->
-		<div class="border border-[var(--color-border)] rounded-[var(--radius-md)] overflow-hidden">
+		<div class="border border-border rounded-md overflow-hidden">
 			<button
 				type="button"
-				class="w-full px-4 py-3 bg-[var(--color-surface-muted)] text-left flex items-center justify-between font-bold text-sm text-[var(--color-text-primary)]"
+				class="w-full px-4 py-3 bg-surface-muted text-left flex items-center justify-between font-bold text-sm text-text-primary"
 				onclick={() => (showRelationSection = !showRelationSection)}
 			>
 				<span>Hubungkan Relasi Keluarga</span>
-				<span class="text-xs text-[var(--color-text-secondary)]">{showRelationSection ? '▲ Tutup' : '▼ Buka'}</span>
+				<span class="text-xs text-text-secondary">{showRelationSection ? '▲ Tutup' : '▼ Buka'}</span>
 			</button>
 
 			{#if showRelationSection}
-				<div class="p-4 bg-[var(--color-surface)]">
+				<div class="p-4 bg-surface">
 					<RelationPicker
 						currentMemberId={memberToEdit?.id}
 						currentGender={gender}
@@ -460,7 +460,7 @@
 	{#snippet actions()}
 		<button
 			type="button"
-			class="px-4 py-2 text-sm font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] text-[var(--color-text-primary)] transition-colors"
+			class="px-4 py-2 text-sm font-semibold rounded-md border border-border hover:bg-surface-muted text-text-primary transition-colors"
 			onclick={handleCloseRequest}
 		>
 			{UI_STRINGS.common.cancel}
@@ -469,7 +469,7 @@
 			type="submit"
 			form="member-form"
 			disabled={isSaving}
-			class="px-4 py-2 text-sm font-semibold rounded-[var(--radius-md)] bg-[var(--color-blue-primary)] hover:bg-[var(--color-blue-primary-hover)] text-white transition-colors disabled:opacity-50"
+			class="px-4 py-2 text-sm font-semibold rounded-md bg-blue-primary hover:bg-blue-primary-hover text-white transition-colors disabled:opacity-50"
 		>
 			{isSaving ? UI_STRINGS.common.loading : UI_STRINGS.common.save}
 		</button>

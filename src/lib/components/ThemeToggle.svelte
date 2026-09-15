@@ -31,14 +31,14 @@
 
 <button
 	type="button"
-	class="p-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
+	class="p-2 rounded-md border border-border bg-surface text-text-primary hover:bg-surface-muted transition-colors active:scale-95"
 	onclick={toggleTheme}
 	aria-label="Ganti Tema"
 	title="Ganti Tema"
 >
 	{#if isDark}
 		<!-- Icon Sun -->
-		<svg class="w-5 h-5 text-[var(--color-accent-warm)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<svg class="w-5 h-5 text-accent-warm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"
@@ -48,7 +48,7 @@
 		</svg>
 	{:else}
 		<!-- Icon Moon -->
-		<svg class="w-5 h-5 text-[var(--color-blue-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+		<svg class="w-5 h-5 text-blue-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"

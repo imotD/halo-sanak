@@ -8,10 +8,10 @@
 	let { onzoomin, onzoomout, onfit }: Props = $props();
 </script>
 
-<div class="flex flex-col bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] shadow-[var(--shadow-modal)] overflow-hidden">
+<div class="flex flex-col bg-surface border border-border rounded-md shadow-modal overflow-hidden">
 	<button
 		type="button"
-		class="p-2.5 text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
+		class="p-2.5 text-text-primary hover:bg-surface-muted transition-colors active:scale-95"
 		onclick={onzoomin}
 		aria-label="Perbesar (Zoom In)"
 		title="Perbesar"
@@ -21,11 +21,11 @@
 		</svg>
 	</button>
 
-	<div class="h-px bg-[var(--color-border)]"></div>
+	<div class="h-px bg-border"></div>
 
 	<button
 		type="button"
-		class="p-2.5 text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
+		class="p-2.5 text-text-primary hover:bg-surface-muted transition-colors active:scale-95"
 		onclick={onzoomout}
 		aria-label="Perkecil (Zoom Out)"
 		title="Perkecil"
@@ -35,12 +35,12 @@
 		</svg>
 	</button>
 
-	<div class="h-px bg-[var(--color-border)]"></div>
+	<div class="h-px bg-border"></div>
 
 	<!-- Pas ke Layar: Ikon tanpa teks dengan label aksesibilitas (PRD §10) -->
 	<button
 		type="button"
-		class="p-2.5 text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
+		class="p-2.5 text-text-primary hover:bg-surface-muted transition-colors active:scale-95"
 		onclick={onfit}
 		aria-label="Pas ke Layar"
 		title="Pas ke Layar"

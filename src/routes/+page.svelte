@@ -66,14 +66,14 @@
 	}
 </script>
 
-<div class="min-h-screen flex flex-col bg-[var(--color-bg-base)] text-[var(--color-text-primary)]">
+<div class="min-h-screen flex flex-col bg-bg-base text-text-primary">
 	<!-- Header Sticky -->
-	<header class="sticky top-0 z-20 bg-[var(--color-surface)] border-b border-[var(--color-border)] px-4 py-3 flex items-center justify-between">
+	<header class="sticky top-0 z-20 bg-surface border-b border-border px-4 py-3 flex items-center justify-between">
 		<div class="flex items-center gap-6">
 			<div>
 				<button
 					type="button"
-					class="text-lg font-extrabold text-[var(--color-text-primary)] tracking-tight hover:text-[var(--color-blue-primary)] transition-colors cursor-pointer text-left"
+					class="text-lg font-extrabold text-text-primary tracking-tight hover:text-blue-primary transition-colors cursor-pointer text-left"
 					onclick={() => (currentTab = 'tree')}
 					title="Ke Pohon Keluarga"
 				>
@@ -85,18 +85,18 @@
 			<nav class="hidden md:flex items-center gap-2 text-sm font-semibold">
 				<button
 					type="button"
-					class="px-3 py-1.5 rounded-[var(--radius-md)] transition-colors {currentTab === 'members'
-						? 'bg-[var(--color-blue-tint)] text-[var(--color-blue-primary)]'
-						: 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
+					class="px-3 py-1.5 rounded-md transition-colors {currentTab === 'members'
+						? 'bg-blue-tint text-blue-primary'
+						: 'text-text-secondary hover:text-text-primary'}"
 					onclick={() => (currentTab = 'members')}
 				>
 					{UI_STRINGS.nav.members} ({members.length})
 				</button>
 				<button
 					type="button"
-					class="px-3 py-1.5 rounded-[var(--radius-md)] transition-colors {currentTab === 'tree'
-						? 'bg-[var(--color-blue-tint)] text-[var(--color-blue-primary)]'
-						: 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
+					class="px-3 py-1.5 rounded-md transition-colors {currentTab === 'tree'
+						? 'bg-blue-tint text-blue-primary'
+						: 'text-text-secondary hover:text-text-primary'}"
 					onclick={() => (currentTab = 'tree')}
 				>
 					{UI_STRINGS.nav.tree}
@@ -109,19 +109,19 @@
 			<!-- Tombol Pengaturan hanya muncul di desktop/tablet, karena di mobile sudah ada di bottom navigation -->
 			<button
 				type="button"
-				class="hidden md:inline-flex p-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors active:scale-95"
+				class="hidden md:inline-flex p-2 rounded-md border border-border bg-surface text-text-primary hover:bg-surface-muted transition-colors active:scale-95"
 				onclick={() => (showSettingsModal = true)}
 				aria-label={UI_STRINGS.nav.settings}
 				title={UI_STRINGS.nav.settings}
 			>
-				<svg class="w-5 h-5 text-[var(--color-text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<svg class="w-5 h-5 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 				</svg>
 			</button>
 			<button
 				type="button"
-				class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[var(--radius-md)] bg-[var(--color-blue-primary)] text-white text-xs font-bold hover:bg-[var(--color-blue-primary-hover)] transition-colors shadow-sm"
+				class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-blue-primary text-white text-xs font-bold hover:bg-blue-primary-hover transition-colors shadow-sm"
 				onclick={openAddModal}
 			>
 				+ {UI_STRINGS.nav.add}
@@ -149,7 +149,7 @@
 	<!-- Mobile Floating Action Button (FAB) Tambah -->
 	<button
 		type="button"
-		class="md:hidden fixed bottom-[4.5rem] right-4 z-30 w-12 h-12 rounded-full bg-[var(--color-blue-primary)] text-white flex items-center justify-center shadow-lg active:scale-95"
+		class="md:hidden fixed bottom-[4.5rem] right-4 z-30 w-12 h-12 rounded-full bg-blue-primary text-white flex items-center justify-center shadow-lg active:scale-95"
 		onclick={openAddModal}
 		aria-label="Tambah Anggota"
 	>
@@ -159,12 +159,12 @@
 	</button>
 
 	<!-- Mobile Bottom Navigation (PRD §10) -->
-	<nav class="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-[var(--color-surface)] border-t border-[var(--color-border)] flex items-center justify-around py-2 px-4 shadow-sm">
+	<nav class="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-surface border-t border-border flex items-center justify-around py-2 px-4 shadow-sm">
 		<button
 			type="button"
 			class="flex flex-col items-center gap-0.5 text-xs font-semibold {currentTab === 'members'
-				? 'text-[var(--color-blue-primary)]'
-				: 'text-[var(--color-text-secondary)]'}"
+				? 'text-blue-primary'
+				: 'text-text-secondary'}"
 			onclick={() => (currentTab = 'members')}
 		>
 			<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -181,8 +181,8 @@
 		<button
 			type="button"
 			class="flex flex-col items-center gap-0.5 text-xs font-semibold {currentTab === 'tree'
-				? 'text-[var(--color-blue-primary)]'
-				: 'text-[var(--color-text-secondary)]'}"
+				? 'text-blue-primary'
+				: 'text-text-secondary'}"
 			onclick={() => (currentTab = 'tree')}
 		>
 			<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -198,7 +198,7 @@
 
 		<button
 			type="button"
-			class="flex flex-col items-center gap-0.5 text-xs font-semibold text-[var(--color-text-secondary)]"
+			class="flex flex-col items-center gap-0.5 text-xs font-semibold text-text-secondary"
 			onclick={() => (showSettingsModal = true)}
 		>
 			<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -255,7 +255,7 @@
 	<!-- Toast Feedback (DaisyUI toast top center) - z-[100] tampil di atas modal saat export/simpan -->
 	{#if toastMessage}
 		<div class="toast toast-top toast-center z-[100] pt-3 pointer-events-none">
-			<div class="alert alert-success shadow-xl text-white font-bold text-xs md:text-sm flex items-center gap-2 px-4 py-2.5 rounded-[var(--radius-md)] border-0 pointer-events-auto">
+			<div class="alert alert-success shadow-xl text-white font-bold text-xs md:text-sm flex items-center gap-2 px-4 py-2.5 rounded-md border-0 pointer-events-auto">
 				<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 				</svg>

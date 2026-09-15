@@ -123,7 +123,7 @@
 	}
 </script>
 
-<div class="relative w-full h-[calc(100vh-140px)] md:h-[calc(100vh-100px)] overflow-hidden bg-[var(--color-bg-base)] border border-[var(--color-border)] rounded-[var(--radius-md)] select-none">
+<div class="relative w-full h-[calc(100vh-140px)] md:h-[calc(100vh-100px)] overflow-hidden bg-bg-base border border-border rounded-md select-none">
 	<!-- Kanvas SVG D3-Zoom selalu berada di DOM agar zoom behavior & listener selalu siap -->
 	<svg
 		bind:this={svgElement}
@@ -190,8 +190,8 @@
 	<!-- Overlay State Kosong bila belum ada anggota -->
 	{#if members.length === 0}
 		<div class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center text-center p-6 space-y-2 bg-bg-base/80 backdrop-blur-[1px]">
-			<p class="text-sm font-bold text-[var(--color-text-primary)]">Belum ada data keluarga</p>
-			<p class="text-xs text-[var(--color-text-secondary)]">Tambah anggota pertama untuk melihat visualisasi pohon keluarga.</p>
+			<p class="text-sm font-bold text-text-primary">Belum ada data keluarga</p>
+			<p class="text-xs text-text-secondary">Tambah anggota pertama untuk melihat visualisasi pohon keluarga.</p>
 		</div>
 	{:else}
 		<!-- Kontrol Zoom Pojok Kanan Atas (Mobile & Desktop) -->
@@ -200,7 +200,7 @@
 		</div>
 
 		<!-- Jumlah Anggota di Kiri Bawah (PRD §10) -->
-		<div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 bg-surface/90 backdrop-blur-[2px] border border-[var(--color-border)] rounded-[var(--radius-sm)] text-xs font-semibold text-[var(--color-text-secondary)] shadow-sm">
+		<div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 bg-surface/90 backdrop-blur-[2px] border border-border rounded-sm text-xs font-semibold text-text-secondary shadow-sm">
 			{members.length} Anggota Keluarga
 		</div>
 	{/if}
