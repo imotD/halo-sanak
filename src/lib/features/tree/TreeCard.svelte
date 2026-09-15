@@ -19,8 +19,7 @@
 	let ageText = $derived.by(() => {
 		if (!ageInfo) return null;
 		const prefix = ageInfo.isEstimated ? '~' : '';
-		const suffix = member.isDeceased ? ' (†)' : '';
-		return `${prefix}${ageInfo.age} tahun${suffix}`;
+		return `${prefix}${ageInfo.age} tahun`;
 	});
 </script>
 
