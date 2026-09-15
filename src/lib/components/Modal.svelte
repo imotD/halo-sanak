@@ -29,19 +29,19 @@
 	>
 		<!-- Mobile: full-screen tanpa radius; Desktop: modal tengah dengan radius-lg (DESIGN.md §7) -->
 		<div
-			class="w-full h-full md:h-auto md:max-h-[90vh] {maxWidth} bg-[var(--color-surface)] flex flex-col md:rounded-[var(--radius-lg)] shadow-[var(--shadow-modal)] border border-[var(--color-border)] overflow-hidden transition-all duration-200"
+			class="w-full h-full md:h-auto md:max-h-[90vh] {maxWidth} bg-surface flex flex-col md:rounded-lg shadow-modal border border-border overflow-hidden transition-all duration-200"
 		>
 			{#if title || onclose}
 				<div
-					class="px-4 py-3 md:px-6 md:py-4 border-b border-[var(--color-border)] flex items-center justify-between shrink-0 bg-[var(--color-surface)] sticky top-0 z-10"
+					class="px-4 py-3 md:px-6 md:py-4 border-b border-border flex items-center justify-between shrink-0 bg-surface sticky top-0 z-10"
 				>
-					<h3 class="text-base md:text-lg font-bold text-[var(--color-text-primary)]">
+					<h3 class="text-base md:text-lg font-bold text-text-primary">
 						{title || ''}
 					</h3>
 					{#if onclose}
 						<button
 							type="button"
-							class="p-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] rounded-[var(--radius-sm)] hover:bg-[var(--color-surface-muted)]"
+							class="p-1.5 text-text-secondary hover:text-text-primary rounded-sm hover:bg-surface-muted"
 							onclick={onclose}
 							aria-label="Tutup"
 						>
@@ -64,7 +64,7 @@
 
 			{#if actions}
 				<div
-					class="px-4 py-3 md:px-6 md:py-4 border-t border-[var(--color-border)] bg-[var(--color-surface)] flex items-center justify-end gap-3 shrink-0"
+					class="px-4 py-3 md:px-6 md:py-4 border-t border-border bg-surface flex items-center justify-end gap-3 shrink-0"
 				>
 					{@render actions()}
 				</div>

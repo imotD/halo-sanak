@@ -24,7 +24,7 @@
 </script>
 
 <div
-	class="w-full h-full p-3 rounded-2xl bg-[var(--color-surface)] border border-blue-soft/50 shadow-[var(--shadow-card)] select-none overflow-hidden hover:border-[var(--color-blue-primary)]"
+	class="w-full h-full p-3 rounded-2xl bg-surface border border-blue-soft/50 shadow-card select-none overflow-hidden hover:border-blue-primary"
 	style="width: {width}px; height: {height}px; box-sizing: border-box;"
 	title="Detail: {member.fullName} (Klik untuk melihat detail)"
 >
@@ -43,15 +43,15 @@
 			<!-- 1. Nama Anggota: Tebal/Bold 700, kontras gelap pekat -->
 			<h5
 				class="text-sm font-bold leading-snug tracking-tight truncate {member.isDeceased
-					? 'text-[var(--color-text-secondary)]'
-					: 'text-[var(--color-text-primary)]'}"
+					? 'text-text-secondary'
+					: 'text-text-primary'}"
 			>
 				{member.fullName}
 			</h5>
 
 			<!-- 2. Subteks: Tipis/Regular 400, abu-abu lembut -->
-			<p class="text-xs font-normal text-[var(--color-text-secondary)] truncate mt-0.5">
-				<span>{member.domicile}</span>{#if ageText}<span class="mx-1 text-[var(--color-border)]">•</span><span>{ageText}</span>{/if}
+			<p class="text-xs font-normal text-text-secondary truncate mt-0.5">
+				<span>{member.domicile}</span>{#if ageText}<span class="mx-1 text-border">•</span><span>{ageText}</span>{/if}
 			</p>
 		</div>
 	</div>

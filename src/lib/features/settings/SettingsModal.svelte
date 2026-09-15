@@ -110,25 +110,25 @@
 <Modal {open} title="Pengaturan & Data" maxWidth="max-w-md" onclose={onclose}>
 	<div class="space-y-5">
 		{#if errorMessage}
-			<div class="p-3 bg-danger/10 text-danger text-xs rounded-[var(--radius-md)] border border-danger/30">
+			<div class="p-3 bg-danger/10 text-danger text-xs rounded-md border border-danger/30">
 				{errorMessage}
 			</div>
 		{/if}
 
 		<!-- 1. Export JSON -->
-		<div class="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-muted)] border border-[var(--color-border)] space-y-2">
+		<div class="p-4 rounded-md bg-surface-muted border border-border space-y-2">
 			<div>
-				<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
+				<h4 class="text-sm font-bold text-text-primary">
 					{UI_STRINGS.settings.exportJSON}
 				</h4>
-				<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
+				<p class="text-xs text-text-secondary mt-0.5">
 					Unduh seluruh silsilah keluarga dan foto profil sebagai cadangan JSON.
 				</p>
 			</div>
 			<button
 				type="button"
 				disabled={isProcessing}
-				class="w-full mt-2 py-2 px-3 text-xs font-bold rounded-[var(--radius-md)] bg-[var(--color-blue-primary)] text-white hover:bg-[var(--color-blue-primary-hover)] transition-colors disabled:opacity-50"
+				class="w-full mt-2 py-2 px-3 text-xs font-bold rounded-md bg-blue-primary text-white hover:bg-blue-primary-hover transition-colors disabled:opacity-50"
 				onclick={handleExport}
 			>
 				{isProcessing ? 'Memproses...' : 'Unduh Cadangan JSON'}
@@ -136,17 +136,17 @@
 		</div>
 
 		<!-- 2. Import JSON (Murni file input) -->
-		<div class="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-muted)] border border-[var(--color-border)] space-y-2">
+		<div class="p-4 rounded-md bg-surface-muted border border-border space-y-2">
 			<div>
-				<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
+				<h4 class="text-sm font-bold text-text-primary">
 					{UI_STRINGS.settings.importJSON}
 				</h4>
-				<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
+				<p class="text-xs text-text-secondary mt-0.5">
 					Pulihkan atau pindahkan pohon keluarga dari file JSON cadangan.
 				</p>
 			</div>
 			<label
-				class="block w-full mt-2 py-2 px-3 text-center text-xs font-bold rounded-[var(--radius-md)] border border-[var(--color-blue-primary)] text-[var(--color-blue-primary)] hover:bg-[var(--color-blue-tint)] transition-colors cursor-pointer {isProcessing ? 'opacity-50 pointer-events-none' : ''}"
+				class="block w-full mt-2 py-2 px-3 text-center text-xs font-bold rounded-md border border-blue-primary text-blue-primary hover:bg-blue-tint transition-colors cursor-pointer {isProcessing ? 'opacity-50 pointer-events-none' : ''}"
 			>
 				<span>Pilih File JSON Cadangan</span>
 				<input
@@ -160,19 +160,19 @@
 		</div>
 
 		<!-- 3. Data Contoh / Demo (Seksi terpisah) -->
-		<div class="p-4 rounded-[var(--radius-md)] bg-[var(--color-surface-muted)] border border-[var(--color-border)] space-y-2">
+		<div class="p-4 rounded-md bg-surface-muted border border-border space-y-2">
 			<div>
-				<h4 class="text-sm font-bold text-[var(--color-text-primary)]">
+				<h4 class="text-sm font-bold text-text-primary">
 					Data Contoh Keluarga (Demo)
 				</h4>
-				<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
+				<p class="text-xs text-text-secondary mt-0.5">
 					Muat contoh silsilah keluarga 3 generasi (6 anggota) untuk melihat tampilan visualisasi pohon secara instan.
 				</p>
 			</div>
 			<button
 				type="button"
 				disabled={isProcessing}
-				class="w-full mt-2 py-2 px-3 text-xs font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface)] text-[var(--color-text-primary)] transition-colors disabled:opacity-50"
+				class="w-full mt-2 py-2 px-3 text-xs font-semibold rounded-md border border-border hover:bg-surface text-text-primary transition-colors disabled:opacity-50"
 				onclick={handleLoadSample}
 			>
 				Muat Contoh Keluarga
@@ -180,19 +180,19 @@
 		</div>
 
 		<!-- 4. Hapus Semua Data (Destruktif) -->
-		<div class="p-4 rounded-[var(--radius-md)] border border-danger/30 bg-danger/5 space-y-2">
+		<div class="p-4 rounded-md border border-danger/30 bg-danger/5 space-y-2">
 			<div>
-				<h4 class="text-sm font-bold text-[var(--color-danger)]">
+				<h4 class="text-sm font-bold text-danger">
 					{UI_STRINGS.settings.clearAll}
 				</h4>
-				<p class="text-xs text-[var(--color-text-secondary)] mt-0.5">
+				<p class="text-xs text-text-secondary mt-0.5">
 					Hapus seluruh anggota dan pohon keluarga di perangkat ini secara permanen.
 				</p>
 			</div>
 			<button
 				type="button"
 				disabled={isProcessing}
-				class="w-full mt-2 py-2 px-3 text-xs font-bold rounded-[var(--radius-md)] bg-[var(--color-danger)] text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+				class="w-full mt-2 py-2 px-3 text-xs font-bold rounded-md bg-danger text-white hover:opacity-90 transition-opacity disabled:opacity-50"
 				onclick={() => (showClearConfirm = true)}
 			>
 				Hapus Semua Data Lokal
@@ -203,7 +203,7 @@
 	{#snippet actions()}
 		<button
 			type="button"
-			class="px-4 py-2 text-xs font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] text-[var(--color-text-primary)]"
+			class="px-4 py-2 text-xs font-semibold rounded-md border border-border hover:bg-surface-muted text-text-primary"
 			onclick={onclose}
 		>
 			{UI_STRINGS.common.close}

@@ -77,10 +77,10 @@
 				type="text"
 				bind:value={searchQuery}
 				placeholder="Cari nama anggota..."
-				class="w-full pl-9 pr-3 py-2 text-sm bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-md)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-blue-primary)]"
+				class="w-full pl-9 pr-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
 			/>
 			<svg
-				class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]"
+				class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke="currentColor"
@@ -96,7 +96,7 @@
 
 		<button
 			type="button"
-			class="p-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:bg-[var(--color-surface-muted)] transition-colors relative"
+			class="p-2 rounded-md border border-border bg-surface text-text-primary hover:bg-surface-muted transition-colors relative"
 			onclick={() => (showFilterPanel = !showFilterPanel)}
 			aria-label="Filter"
 			title="Filter Anggota"
@@ -110,7 +110,7 @@
 				/>
 			</svg>
 			{#if hasActiveFilter}
-				<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-[var(--color-blue-primary)]"></span>
+				<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-blue-primary"></span>
 			{/if}
 		</button>
 	</div>
@@ -136,7 +136,7 @@
 	{:else}
 		<!-- Empty state sesuai DESIGN.md §5 & PRD §8.2: line-art sederhana + 1 aksen warna -->
 		<div class="py-16 text-center space-y-3">
-			<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--color-blue-tint)] text-[var(--color-blue-soft)] mb-2">
+			<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-tint text-blue-soft mb-2">
 				<svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path
 						stroke-linecap="round"
@@ -146,10 +146,10 @@
 					/>
 				</svg>
 			</div>
-			<h4 class="text-base font-bold text-[var(--color-text-primary)]">
+			<h4 class="text-base font-bold text-text-primary">
 				{members.length === 0 ? 'Belum Ada Anggota Keluarga' : 'Tidak Ada Anggota Ditemukan'}
 			</h4>
-			<p class="text-xs text-[var(--color-text-secondary)] max-w-xs mx-auto">
+			<p class="text-xs text-text-secondary max-w-xs mx-auto">
 				{members.length === 0
 					? 'Mulai bangun pohon keluarga dengan menambahkan anggota keluarga pertama Anda.'
 					: 'Coba sesuaikan kata kunci pencarian atau reset filter yang sedang aktif.'}
@@ -158,7 +158,7 @@
 				{#if members.length === 0}
 					<button
 						type="button"
-						class="mt-2 px-4 py-2 text-xs font-bold rounded-[var(--radius-md)] bg-[var(--color-blue-primary)] text-white hover:bg-[var(--color-blue-primary-hover)] transition-colors"
+						class="mt-2 px-4 py-2 text-xs font-bold rounded-md bg-blue-primary text-white hover:bg-blue-primary-hover transition-colors"
 						onclick={onaddclick}
 					>
 						+ Tambah Anggota Pertama
@@ -166,7 +166,7 @@
 				{:else if hasActiveFilter}
 					<button
 						type="button"
-						class="mt-2 px-4 py-2 text-xs font-semibold rounded-[var(--radius-md)] border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] text-[var(--color-text-primary)] transition-colors"
+						class="mt-2 px-4 py-2 text-xs font-semibold rounded-md border border-border hover:bg-surface-muted text-text-primary transition-colors"
 						onclick={resetFilters}
 					>
 						Reset Pencarian & Filter

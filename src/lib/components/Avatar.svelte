@@ -25,10 +25,10 @@
 
 <div
 	class="rounded-full flex items-center justify-center font-bold select-none overflow-hidden shrink-0 {sizeConfig.class} {isDeceased
-		? 'bg-[var(--color-surface-muted)] text-[var(--color-text-secondary)] border-2 border-[var(--color-border)]'
+		? 'bg-surface-muted text-text-secondary border-2 border-border'
 		: isMale
-			? 'bg-[var(--color-blue-tint)] text-[var(--color-blue-primary)] border-2 border-[var(--color-blue-primary)]'
-			: 'bg-[var(--color-pink-tint)] text-[var(--color-pink-primary)] border-2 border-[var(--color-pink-primary)]'}"
+			? 'bg-blue-tint text-blue-primary border-2 border-blue-primary'
+			: 'bg-pink-tint text-pink-primary border-2 border-pink-primary'}"
 	style="width: {sizeConfig.px}px; height: {sizeConfig.px}px; min-width: {sizeConfig.px}px; min-height: {sizeConfig.px}px;"
 >
 	{#if photoUrl}
