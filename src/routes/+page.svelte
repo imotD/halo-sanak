@@ -150,7 +150,7 @@
 	<!-- Mobile Floating Action Button (FAB) Tambah -->
 	<button
 		type="button"
-		class="md:hidden fixed bottom-[4.5rem] right-4 z-30 w-12 h-12 rounded-full bg-blue-primary text-white flex items-center justify-center shadow-lg active:scale-95"
+		class="md:hidden fixed bottom-18 right-4 z-30 w-12 h-12 rounded-full bg-blue-primary text-white flex items-center justify-center shadow-lg active:scale-95"
 		onclick={openAddModal}
 		aria-label="Tambah Anggota"
 	>
@@ -255,7 +255,7 @@
 
 	<!-- Toast Feedback (DaisyUI toast top center) - z-[100] tampil di atas modal saat export/simpan -->
 	{#if toastMessage}
-		<div class="toast toast-top toast-center z-[100] pt-3 pointer-events-none">
+		<div class="toast toast-top toast-center z-100 pt-3 pointer-events-none">
 			<div class="alert alert-success shadow-xl text-white font-bold text-xs md:text-sm flex items-center gap-2 px-4 py-2.5 rounded-md border-0 pointer-events-auto">
 				<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />

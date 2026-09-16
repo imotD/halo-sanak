@@ -65,6 +65,11 @@ Logic domain (validasi relasi, deteksi siklus, kalkulasi usia, kompresi foto) **
 - Semua string yang tampil ke user berbahasa Indonesia, dan diambil dari satu file konstanta teks (`src/lib/strings.ts` atau serupa) — jangan hardcode string UI tersebar di banyak komponen, supaya konsisten dan mudah direvisi.
 - Nama variabel/fungsi dalam bahasa Inggris; teks UI dalam bahasa Indonesia.
 - Setiap fungsi domain yang disebut eksplisit di PRD (cycle detection, symmetric spouse link, age calculation, photo compression) harus punya unit test sebelum dianggap selesai.
+- **Komponen UI (DaisyUI 5 First)**:
+  - Selalu dahulukan komponen struktur dari DaisyUI untuk elemen interaktif/standar: tombol (`btn`, `btn-sm`, `btn-xs`), badge (`badge`, `badge-xs`), form input (`input`, `select`, `checkbox`, `textarea`), modal (`modal`, `modal-box`), feedback (`toast`, `alert`).
+  - Dilarang merakit ulang elemen interaktif dari nol dengan utility manual Tailwind mentah (seperti `inline-flex items-center px-... py-... rounded-...`) jika DaisyUI sudah menyediakannya.
+  - Untuk warna dan estetika, gunakan DaisyUI sebagai struktur dasar lalu timpa (override) menggunakan utility token tema proyek dari `src/app.css` / `DESIGN.md` (misal: `badge badge-xs bg-accent-warm/20 text-accent-warm border-accent-warm/40` atau `btn btn-sm bg-blue-primary text-white hover:bg-blue-primary-hover border-0`).
+  - Gunakan class utility resmi yang dipetakan di `@theme` (`bg-surface`, `text-text-primary`, `border-border`, `rounded-md`, `shadow-card`, dll) alih-alih arbitrary syntax `[var(--...)]` atau `(--...)`.
 
 ## 5. Aturan bisnis kritis — jangan diinterpretasikan bebas
 
