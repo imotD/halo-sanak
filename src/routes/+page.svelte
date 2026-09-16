@@ -70,7 +70,7 @@
 	<!-- Header Sticky -->
 	<header class="sticky top-0 z-20 bg-surface border-b border-border px-4 py-3 flex items-center justify-between">
 		<div class="flex items-center gap-6">
-			<div>
+			<div class="flex items-center gap-2">
 				<button
 					type="button"
 					class="text-lg font-extrabold text-text-primary tracking-tight hover:text-blue-primary transition-colors cursor-pointer text-left"
@@ -79,6 +79,7 @@
 				>
 					{UI_STRINGS.appName}
 				</button>
+				<span class="badge badge-warning badge-xs">DEV</span>
 			</div>
 
 			<!-- Desktop Nav Tabs -->
