@@ -9,6 +9,11 @@ describe('calculateAge', () => {
 		expect(calculateAge({ precision: 'year', value: '1990' }, false, undefined, fixedNow)).toBeNull();
 	});
 
+	it('mengembalikan null jika presisi full tapi value bukan string tanggal lengkap (hindari number terinterpretasi sebagai epoch)', () => {
+		// value diberikan sebagai number - harus ditolak
+		expect(calculateAge({ precision: 'full', value: 19900110 as any }, false, undefined, fixedNow)).toBeNull();
+	});
+
 	it('menghitung umur tepat jika masih hidup dan presisi full', () => {
 		// Lahir 1990-01-10 -> umur 36 pada 2026-06-15
 		const age = calculateAge({ precision: 'full', value: '1990-01-10' }, false, undefined, fixedNow);
@@ -57,6 +62,12 @@ describe('getAgeInfo', () => {
 	it('mengembalikan estimasi umur dengan isEstimated: true jika presisi tahun saja', () => {
 		const info = getAgeInfo({ precision: 'year', value: '1950' }, false, undefined, fixedNow);
 		// 2026 - 1950 = 76
+		expect(info).toEqual({ age: 76, isEstimated: true });
+	});
+
+	it('mengembalikan estimasi umur jika value tahun diberikan sebagai number', () => {
+		const info = getAgeInfo({ precision: 'year', value: 1950 as any }, false, undefined, fixedNow);
+		// harus tetap menghasilkan estimasi 76
 		expect(info).toEqual({ age: 76, isEstimated: true });
 	});
 
