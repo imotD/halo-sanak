@@ -163,6 +163,10 @@
 
 		isSaving = true;
 		try {
+			// Normalisasi nilai tanggal sebelum disimpan: pastikan `value` bertipe string sesuai schema
+			const normalizedBirth = birthDateValue ? { precision: birthPrecision, value: String(birthDateValue).trim() } : undefined;
+			const normalizedDeath = isDeceased && deathDateValue ? { precision: deathPrecision, value: String(deathDateValue).trim() } : undefined;
+
 			const savedId = await MemberRepository.saveMemberWithRelations(
 				{
 					id: memberToEdit?.id,
@@ -170,14 +174,9 @@
 					gender,
 					domicile: domicile.trim(),
 					photoUrl,
-					birthDate: birthDateValue
-						? { precision: birthPrecision, value: birthDateValue }
-						: undefined,
+					birthDate: normalizedBirth,
 					isDeceased,
-					deathDate:
-						isDeceased && deathDateValue
-							? { precision: deathPrecision, value: deathDateValue }
-							: undefined,
+					deathDate: normalizedDeath,
 					occupation: occupation.trim() || undefined,
 					description: description.trim() || undefined
 				},

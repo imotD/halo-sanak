@@ -18,11 +18,16 @@ export function calculateAge(
 	deathDate?: FuzzyDate,
 	now: Date = new Date()
 ): number | null {
+	// Hanya terima tanggal lengkap berformat 'YYYY-MM-DD'
 	if (!birthDate || birthDate.precision !== 'full') {
 		return null;
 	}
 
-	const birth = new Date(birthDate.value);
+	// Validasi format string agar tidak menginterpretasikan number sebagai epoch ms
+	const birthVal = String(birthDate.value ?? '').trim();
+	if (!/^\d{4}-\d{2}-\d{2}$/.test(birthVal)) return null;
+
+	const birth = new Date(birthVal);
 	if (isNaN(birth.getTime())) {
 		return null;
 	}
@@ -32,7 +37,9 @@ export function calculateAge(
 		if (!deathDate || deathDate.precision !== 'full') {
 			return null;
 		}
-		targetDate = new Date(deathDate.value);
+		const deathVal = String(deathDate.value ?? '').trim();
+		if (!/^\d{4}-\d{2}-\d{2}$/.test(deathVal)) return null;
+		targetDate = new Date(deathVal);
 		if (isNaN(targetDate.getTime())) {
 			return null;
 		}
@@ -71,7 +78,11 @@ export function getAgeInfo(
 	}
 
 	// 2. Jika presisi tahun, hitung estimasi selisih tahun
-	const birthYear = parseInt(birthDate.value.slice(0, 4), 10);
+	// Terima `value` sebagai string atau number — normalisasi ke string lalu ambil 4 digit pertama
+	const birthValStr = String(birthDate.value ?? '').trim();
+	const birthMatch = birthValStr.match(/^(\d{4})/);
+	if (!birthMatch) return null;
+	const birthYear = parseInt(birthMatch[1], 10);
 	if (isNaN(birthYear) || birthYear <= 0) {
 		return null;
 	}
@@ -81,7 +92,10 @@ export function getAgeInfo(
 		if (!deathDate || !deathDate.value) {
 			return null; // wafat tanpa tahun wafat tidak diestimasi
 		}
-		targetYear = parseInt(deathDate.value.slice(0, 4), 10);
+		const deathValStr = String(deathDate.value ?? '').trim();
+		const deathMatch = deathValStr.match(/^(\d{4})/);
+		if (!deathMatch) return null;
+		targetYear = parseInt(deathMatch[1], 10);
 		if (isNaN(targetYear) || targetYear <= 0) {
 			return null;
 		}
