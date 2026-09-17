@@ -26,6 +26,8 @@
 
 	let showDeleteConfirm = $state(false);
 	let deleteErrorMessage = $state<string | null>(null);
+	// Photo preview state
+	let showPhotoPreview = $state(false);
 
 	$effect(() => {
 		if (open && memberId) {
@@ -133,13 +135,30 @@
 
 			<!-- Urutan PRD §8.3: 1. Foto/inisial dan nama -->
 			<div class="flex items-center gap-4">
-				<Avatar
-					name={currentMember.fullName}
-					gender={currentMember.gender}
-					photoUrl={currentMember.photoUrl}
-					isDeceased={currentMember.isDeceased}
-					size="lg"
-				/>
+				                    {#if currentMember.photoUrl}
+				                        <button
+				                            type="button"
+				                            class="rounded-full shrink-0 cursor-pointer"
+				                            onclick={() => (showPhotoPreview = true)}
+				                            aria-label="Pratinjau Foto"
+				                        >
+				                            <Avatar
+				                                name={currentMember.fullName}
+				                                gender={currentMember.gender}
+				                                photoUrl={currentMember.photoUrl}
+				                                isDeceased={currentMember.isDeceased}
+				                                size="lg"
+				                            />
+				                        </button>
+				                    {:else}
+				                        <Avatar
+				                            name={currentMember.fullName}
+				                            gender={currentMember.gender}
+				                            photoUrl={currentMember.photoUrl}
+				                            isDeceased={currentMember.isDeceased}
+				                            size="lg"
+				                        />
+				                    {/if}
 				<div class="flex-1 min-w-0">
 					<h2 class="text-xl md:text-2xl font-extrabold text-text-primary truncate">
 						{currentMember.fullName}
@@ -308,9 +327,9 @@
 				</div>
 			</div>
 		</div>
-	{/if}
+	        {/if}
 
-	{#snippet actions()}
+	        {#snippet actions()}
 		<div class="flex items-center justify-between w-full">
 			<button
 				type="button"
@@ -339,6 +358,15 @@
 			</div>
 		</div>
 	{/snippet}
+</Modal>
+
+<!-- Photo preview modal -->
+<Modal open={showPhotoPreview} title={currentMember?.fullName ? 'Preview: ' + currentMember.fullName : 'Pratinjau Foto'} maxWidth="max-w-2xl" onclose={() => (showPhotoPreview = false)}>
+	{#if currentMember?.photoUrl}
+		<div class="flex items-center justify-center">
+			<img src={currentMember.photoUrl} alt={currentMember.fullName} class="max-h-[80vh] w-auto h-auto rounded-md object-contain" />
+		</div>
+	{/if}
 </Modal>
 
 <!-- Konfirmasi Hapus Anggota Bebas Relasi -->
