@@ -147,13 +147,14 @@
 						stroke-dasharray="4 3"
 					/>
 				{:else}
-					<!-- Garis Orang Tua -> Anak (Path melengkung halus) -->
-					{@const midY = (edge.fromY + edge.toY) / 2}
+					<!-- Garis Orang Tua -> Anak (path sudah dihitung penuh di tree-layout.ts,
+					     termasuk rute "jembatan" kalau kedua ortu tidak bersebelahan) -->
 					<path
-						d="M {edge.fromX} {edge.fromY} C {edge.fromX} {midY}, {edge.toX} {midY}, {edge.toX} {edge.toY}"
+						d={edge.path}
 						fill="none"
 						stroke="var(--color-border)"
 						stroke-width="1.75"
+						stroke-linecap="round"
 					/>
 				{/if}
 			{/each}
