@@ -6,10 +6,11 @@ Panduan kerja untuk AI coding agent (opencode) saat membangun HaloSanak.
 
 File ini (`AGENTS.md`) dibaca otomatis oleh opencode di awal sesi. Tapi dua file berikut **tidak** otomatis terbaca — kamu (agent) wajib membukanya sendiri lewat file tool sebelum mengerjakan task apa pun, di setiap sesi baru:
 
-- `prd-halosanak.md` (root project) — sumber kebenaran untuk *apa* yang dibangun: fitur, aturan bisnis, model data, acceptance criteria.
+- `prd-halosanak.md` (root project) — PRD v1, sumber kebenaran untuk fitur inti yang sudah dibangun: fitur, aturan bisnis, model data, acceptance criteria.
+- `prd-addon-v2.md` (root project, jika ada) — tambahan fitur di atas v1. Kalau file ini ada di project, baca juga. Kalau bertentangan dengan PRD v1, addon yang berlaku untuk area yang disebutkan di dalamnya; area lain tetap ikut PRD v1.
 - `DESIGN.md` (root project) — sumber kebenaran untuk token visual: warna, tipografi, radius, shadow, motion. Jangan menebak nilai desain (hex warna, ukuran font, radius) — semua sudah dikunci di file itu.
 
-Urutan prioritas kalau ada konflik: PRD (fitur/bisnis) → DESIGN.md (visual) → file ini (cara kerja teknis/proses). Kalau ketiganya tidak menjawab suatu situasi, berhenti dan tanya user (lihat §7).
+Urutan prioritas kalau ada konflik: PRD addon terbaru (untuk area yang dibahasnya) → PRD v1 → DESIGN.md (visual) → file ini (cara kerja teknis/proses). Kalau semuanya tidak menjawab suatu situasi, berhenti dan tanya user (lihat §7).
 
 ## 1. Ringkasan proyek
 

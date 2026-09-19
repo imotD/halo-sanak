@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Modal from '$lib/components/Modal.svelte';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import Badge from '$lib/components/Badge.svelte';
 	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 	import {
 		exportDatabaseToJSON,
@@ -8,7 +10,17 @@
 		clearAllLocalData
 	} from './data-backup';
 	import { SAMPLE_FAMILY_SNAPSHOT } from './sample-data';
-	import type { ExportFile } from '$lib/schemas';
+	import { MemberRepository } from '$lib/db/member-repository';
+	import { getUpcomingEvents, type UpcomingEvent } from '$lib/domain/reminders';
+	import {
+		isNotificationSupported,
+		getNotificationPermissionStatus,
+		isNotificationEnabled,
+		setNotificationEnabled,
+		requestNotificationPermission,
+		notifyTodayEvents
+	} from '$lib/services/notifications';
+	import type { ExportFile, Member } from '$lib/schemas';
 	import { UI_STRINGS } from '$lib/strings';
 
 	interface Props {
@@ -23,6 +35,88 @@
 
 	let isProcessing = $state(false);
 	let errorMessage = $state<string | null>(null);
+	let successMessage = $state<string | null>(null);
+
+	// Upcoming events state (PRD v2 §2.3)
+	let upcomingEvents = $state<UpcomingEvent[]>([]);
+	let notifEnabled = $state(false);
+	let notifSupported = $state(false);
+	let notifPermission = $state<NotificationPermission | 'unsupported'>('default');
+
+	let eventsVersion = 0;
+	let eventsLoading = $state(false);
+	let eventsError = $state(false);
+
+	$effect(() => {
+		const version = ++eventsVersion;
+		if (open) {
+			void loadUpcomingEvents(version);
+			checkNotifStatus();
+		}
+		return () => { eventsVersion++; };
+	});
+
+	function resumeNotifications() {
+		if (open && document.visibilityState === 'visible') {
+			checkNotifStatus();
+			void loadUpcomingEvents(++eventsVersion);
+		}
+	}
+
+	function checkNotifStatus() {
+		notifSupported = isNotificationSupported();
+		notifPermission = getNotificationPermissionStatus();
+		notifEnabled = isNotificationEnabled();
+	}
+
+	let notifBusy = $state(false);
+
+	async function handleToggleNotif(e: Event) {
+		const target = e.target as HTMLInputElement;
+		if (notifBusy) return;
+		const shouldEnable = target.checked;
+		notifBusy = true;
+		errorMessage = null;
+		successMessage = null;
+		try {
+			if (shouldEnable && getNotificationPermissionStatus() !== 'granted') {
+				notifPermission = await requestNotificationPermission();
+			}
+			if (shouldEnable && getNotificationPermissionStatus() !== 'granted') {
+				errorMessage = UI_STRINGS.settings.permissionMissing;
+			} else if (!setNotificationEnabled(shouldEnable)) {
+				errorMessage = UI_STRINGS.errors.notificationStorage;
+			} else {
+				const msg = shouldEnable ? UI_STRINGS.settings.notificationsEnabled : UI_STRINGS.settings.notificationsDisabled;
+				successMessage = msg;
+				showToast(msg);
+			}
+			checkNotifStatus();
+			target.checked = notifEnabled;
+			if (notifEnabled) {
+				const members = await MemberRepository.getAllMembers();
+				const freshEvents = getUpcomingEvents(members, new Date(), 7);
+				upcomingEvents = freshEvents;
+				await notifyTodayEvents(freshEvents);
+			}
+		} finally {
+			notifBusy = false;
+		}
+	}
+
+	async function loadUpcomingEvents(version: number) {
+		eventsLoading = true;
+		eventsError = false;
+		try {
+			const members = await MemberRepository.getAllMembers();
+			if (version !== eventsVersion) return;
+			upcomingEvents = getUpcomingEvents(members, new Date(), 7);
+		} catch {
+			if (version === eventsVersion) eventsError = true;
+		} finally {
+			if (version === eventsVersion) eventsLoading = false;
+		}
+	}
 
 	// State Import flow
 	let pendingSnapshot = $state<ExportFile | null>(null);
@@ -34,10 +128,13 @@
 
 	async function handleExport() {
 		errorMessage = null;
+		successMessage = null;
 		isProcessing = true;
 		try {
 			const { filename, memberCount } = await exportDatabaseToJSON();
-			showToast(`Export berhasil (${memberCount} anggota): ${filename}`);
+			const msg = `Export berhasil (${memberCount} anggota): ${filename}`;
+			successMessage = msg;
+			showToast(msg);
 		} catch (err: unknown) {
 			errorMessage = err instanceof Error ? err.message : 'Gagal mengekspor data.';
 		} finally {
@@ -74,7 +171,7 @@
 	}
 
 	async function confirmImport() {
-		if (!pendingSnapshot) return;
+		if (!pendingSnapshot || isProcessing) return;
 		errorMessage = null;
 		isProcessing = true;
 		try {
@@ -91,6 +188,7 @@
 	}
 
 	async function confirmClearAll() {
+		if (isProcessing) return;
 		errorMessage = null;
 		isProcessing = true;
 		try {
@@ -107,13 +205,102 @@
 	}
 </script>
 
-<Modal {open} title="Pengaturan & Data" maxWidth="max-w-md" onclose={onclose}>
+<svelte:document onvisibilitychange={resumeNotifications} />
+<Modal {open} title="Pengaturan & Data" maxWidth="max-w-md" onclose={() => { if (!isProcessing && !notifBusy) onclose(); }}>
 	<div class="space-y-5">
 		{#if errorMessage}
 			<div class="p-3 bg-danger/10 text-danger text-xs rounded-md border border-danger/30">
 				{errorMessage}
 			</div>
 		{/if}
+		{#if successMessage}
+			<div class="p-3 bg-success/10 text-success text-xs rounded-md border border-success/30 font-medium">
+				{successMessage}
+			</div>
+		{/if}
+
+		<!-- 0. Peringatan & Pengingat (PRD v2 §2.3) -->
+		<div class="p-4 rounded-md bg-surface border border-border space-y-3 shadow-card">
+			<div class="flex items-center justify-between">
+				<div>
+					<h4 class="text-sm font-bold text-text-primary">
+						{UI_STRINGS.settings.remindersTitle}
+					</h4>
+					<p class="text-xs text-text-secondary mt-0.5">
+						{UI_STRINGS.settings.remindersSubtitle}
+					</p>
+				</div>
+
+				{#if notifSupported}
+					<label class="flex items-center gap-2 cursor-pointer select-none">
+						<span class="sr-only">{UI_STRINGS.settings.enableNotifications}</span>
+						<input
+							type="checkbox"
+							disabled={notifBusy || isProcessing}
+							checked={notifEnabled}
+							onchange={handleToggleNotif}
+							aria-label={UI_STRINGS.settings.enableNotifications}
+							class="toggle toggle-sm toggle-primary"
+						/>
+					</label>
+				{/if}
+			</div>
+
+			{#if notifSupported}
+				<div class="p-2.5 bg-surface-muted rounded-md border border-border text-[11px] text-text-secondary leading-relaxed">
+					{UI_STRINGS.settings.notificationsDisclaimer}
+					{#if notifPermission === 'denied'}
+						<span class="block text-danger font-semibold mt-1">
+							Izin notifikasi diblokir di pengaturan peramban Anda.
+						</span>
+					{/if}
+				</div>
+			{:else}
+				<div class="p-2.5 bg-surface-muted rounded-md border border-border text-[11px] text-text-secondary leading-relaxed">
+					{UI_STRINGS.settings.notificationsUnsupported}
+				</div>
+			{/if}
+
+			{#if eventsLoading}
+				<p role="status">{UI_STRINGS.common.loading}</p>
+			{:else if eventsError}
+				<p role="alert">{UI_STRINGS.errors.loadFailed}</p>
+			{:else if upcomingEvents.length === 0}
+				<p class="text-xs text-text-secondary italic py-2">
+					{UI_STRINGS.settings.noUpcomingEvents}
+				</p>
+			{:else}
+				<div class="space-y-2 max-h-48 overflow-y-auto divide-y divide-border/40">
+					{#each upcomingEvents as event}
+						<div class="flex items-center justify-between pt-2 first:pt-0">
+							<div class="flex items-center gap-2.5 min-w-0">
+								<Avatar
+									name={event.memberName}
+									gender={event.gender}
+									photoUrl={event.photoUrl}
+									isDeceased={event.type !== 'birthday'}
+									size="sm"
+								/>
+								<div class="min-w-0">
+									<span class="text-xs font-bold text-text-primary truncate block">
+										{event.memberName}
+									</span>
+									<span class="text-[11px] text-text-secondary block">
+										{event.label} ({event.dateFormatted})
+									</span>
+								</div>
+							</div>
+
+							<div class="shrink-0 ml-2">
+								<Badge variant={event.daysRemaining === 0 ? 'success' : 'neutral'}>
+									{event.daysRemaining === 0 ? 'Hari Ini' : `${event.daysRemaining} hari`}
+								</Badge>
+							</div>
+						</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
 
 		<!-- 1. Export JSON -->
 		<div class="p-4 rounded-md bg-surface-muted border border-border space-y-2">
@@ -204,7 +391,8 @@
 		<button
 			type="button"
 			class="px-4 py-2 text-xs font-semibold rounded-md border border-border hover:bg-surface-muted text-text-primary"
-			onclick={onclose}
+				disabled={isProcessing || notifBusy}
+				onclick={onclose}
 		>
 			{UI_STRINGS.common.close}
 		</button>

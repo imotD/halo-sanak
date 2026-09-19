@@ -36,6 +36,7 @@
 	// Tanggal Lahir
 	let birthPrecision = $state<DatePrecision>('full');
 	let birthDateValue = $state('');
+	let birthOrder = $state<number | undefined>(undefined);
 
 	// Wafat
 	let isDeceased = $state(false);
@@ -58,15 +59,30 @@
 	let isDirty = $state(false);
 	let showDiscardConfirm = $state(false);
 
+	let isLoading = $state(false);
+	let loadFailed = $state(false);
+	let loadVersion = 0;
+	let photoVersion = 0;
+
 	$effect(() => {
-		if (open) {
-			loadData();
-		}
+		const version = ++loadVersion;
+		photoVersion++;
+		if (open) void loadData(version, memberToEdit, initialGender, initialFatherId, initialMotherId);
+		return () => { loadVersion++; photoVersion++; };
 	});
 
-	async function loadData() {
+	async function loadData(version: number, memberToEdit?: Member, initialGender?: Gender, initialFatherId?: string, initialMotherId?: string) {
+		isLoading = true;
+		loadFailed = false;
+		errorMessage = null;
+		showDiscardConfirm = false;
 		try {
-			availableMembers = await MemberRepository.getAllMembers();
+			const [people, rels] = await Promise.all([
+				MemberRepository.getAllMembers(),
+				memberToEdit ? MemberRepository.getMemberRelationships(memberToEdit.id) : Promise.resolve([])
+			]);
+			if (version !== loadVersion) return;
+			availableMembers = people;
 			if (memberToEdit) {
 				fullName = memberToEdit.fullName;
 				gender = memberToEdit.gender;
@@ -74,6 +90,7 @@
 				photoUrl = memberToEdit.photoUrl;
 				birthPrecision = memberToEdit.birthDate?.precision || 'full';
 				birthDateValue = memberToEdit.birthDate?.value || '';
+				birthOrder = typeof memberToEdit.birthOrder === 'number' ? memberToEdit.birthOrder : undefined;
 				isDeceased = memberToEdit.isDeceased;
 				deathPrecision = memberToEdit.deathDate?.precision || 'full';
 				deathDateValue = memberToEdit.deathDate?.value || '';
@@ -81,7 +98,6 @@
 				description = memberToEdit.description || '';
 
 				// Muat relasi eksisting
-				const rels = await MemberRepository.getMemberRelationships(memberToEdit.id);
 				const father = rels.find(
 					(r) => r.type === 'parent-child' && r.toMemberId === memberToEdit.id && r.role === 'father'
 				);
@@ -107,6 +123,7 @@
 				photoUrl = undefined;
 				birthPrecision = 'full';
 				birthDateValue = '';
+				birthOrder = undefined;
 				isDeceased = false;
 				deathPrecision = 'full';
 				deathDateValue = '';
@@ -119,8 +136,13 @@
 			}
 			isDirty = false;
 			errorMessage = null;
-		} catch (err) {
-			console.error(err);
+		} catch {
+			if (version === loadVersion) {
+				loadFailed = true;
+				errorMessage = UI_STRINGS.errors.loadFailed;
+			}
+		} finally {
+			if (version === loadVersion) isLoading = false;
 		}
 	}
 
@@ -130,17 +152,20 @@
 		if (!file) return;
 
 		// Kompresi WebP max 400x400 dan <=100KB (PRD §6)
+		const version = ++photoVersion;
 		const compressed = await compressProfilePhoto(file);
+		if (version !== photoVersion) return;
 		if (compressed) {
 			photoUrl = compressed;
 			isDirty = true;
 		} else {
 			// Fallback tanpa foto jika proses kompresi gagal
-			errorMessage = 'Foto tidak dapat diproses. Anda tetap dapat menyimpan profil tanpa foto.';
+			errorMessage = UI_STRINGS.member.photoFailed;
 		}
 	}
 
 	function handleCloseRequest() {
+		if (isSaving) return;
 		if (isDirty) {
 			showDiscardConfirm = true;
 		} else {
@@ -150,14 +175,15 @@
 
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
+		if (isSaving || isLoading || loadFailed) return;
 		errorMessage = null;
 
 		if (!fullName.trim()) {
-			errorMessage = 'Nama lengkap wajib diisi.';
+			errorMessage = UI_STRINGS.member.nameRequired;
 			return;
 		}
 		if (!domicile.trim()) {
-			errorMessage = 'Domisili wajib diisi.';
+			errorMessage = UI_STRINGS.member.domicileRequired;
 			return;
 		}
 
@@ -167,6 +193,18 @@
 			const normalizedBirth = birthDateValue ? { precision: birthPrecision, value: String(birthDateValue).trim() } : undefined;
 			const normalizedDeath = isDeceased && deathDateValue ? { precision: deathPrecision, value: String(deathDateValue).trim() } : undefined;
 
+			// Validasi birthOrder: opsional, jika diisi harus angka bulat positif (>= 1)
+			let parsedBirthOrder: number | undefined = undefined;
+			if (birthOrder !== undefined && birthOrder !== null && String(birthOrder).trim() !== '') {
+				const num = Number(birthOrder);
+				if (!Number.isInteger(num) || num < 1) {
+					errorMessage = UI_STRINGS.member.birthOrderInvalid;
+					isSaving = false;
+					return;
+				}
+				parsedBirthOrder = num;
+			}
+
 			const savedId = await MemberRepository.saveMemberWithRelations(
 				{
 					id: memberToEdit?.id,
@@ -175,6 +213,7 @@
 					domicile: domicile.trim(),
 					photoUrl,
 					birthDate: normalizedBirth,
+					birthOrder: parsedBirthOrder,
 					isDeceased,
 					deathDate: normalizedDeath,
 					occupation: occupation.trim() || undefined,
@@ -190,7 +229,7 @@
 			isDirty = false;
 			onsaved(savedId);
 		} catch (err: unknown) {
-			errorMessage = err instanceof Error ? err.message : 'Terjadi kesalahan saat menyimpan data.';
+			errorMessage = err instanceof Error ? err.message : UI_STRINGS.member.saveFailed;
 		} finally {
 			isSaving = false;
 		}
@@ -209,7 +248,9 @@
 		</div>
 	{/if}
 
-	<form id="member-form" onsubmit={handleSubmit} class="space-y-5">
+	{#if isLoading}<p role="status">{UI_STRINGS.common.loading}</p>{/if}
+	<form id="member-form" onsubmit={handleSubmit}>
+	<fieldset disabled={isLoading || loadFailed || isSaving} class="space-y-5">
 		<!-- 1. Foto -->
 		<div>
 			<label for="profile-photo-input" class="block text-xs font-semibold text-text-secondary mb-1">
@@ -223,7 +264,7 @@
 					<button
 						type="button"
 						class="text-xs text-danger hover:underline"
-						onclick={() => { photoUrl = undefined; isDirty = true; }}
+						onclick={() => { photoVersion++; photoUrl = undefined; isDirty = true; }}
 					>
 						Hapus Foto
 					</button>
@@ -340,6 +381,23 @@
 			{/if}
 		</div>
 
+		<!-- 5b. Anak ke-berapa (PRD v2 §1.5, opsional) -->
+		<div>
+			<label for="birth-order-input" class="block text-xs font-semibold text-text-secondary mb-1">
+				{UI_STRINGS.member.birthOrder}
+			</label>
+			<input
+				id="birth-order-input"
+				type="number"
+				min="1"
+				step="1"
+				placeholder={UI_STRINGS.member.birthOrderPlaceholder}
+				bind:value={birthOrder}
+				oninput={() => (isDirty = true)}
+				class="w-full px-3 py-2 text-sm bg-surface border border-border rounded-md text-text-primary focus:outline-none focus:border-blue-primary"
+			/>
+		</div>
+
 		<!-- 6. Status Wafat & Tanggal Wafat -->
 		<div class="p-3 border border-border rounded-md bg-surface-muted">
 			<label class="flex items-center gap-3 cursor-pointer">
@@ -454,6 +512,7 @@
 				</div>
 			{/if}
 		</div>
+	</fieldset>
 	</form>
 
 	{#snippet actions()}
@@ -467,7 +526,7 @@
 		<button
 			type="submit"
 			form="member-form"
-			disabled={isSaving}
+			disabled={isSaving || isLoading || loadFailed}
 			class="px-4 py-2 text-sm font-semibold rounded-md bg-blue-primary hover:bg-blue-primary-hover text-white transition-colors disabled:opacity-50"
 		>
 			{isSaving ? UI_STRINGS.common.loading : UI_STRINGS.common.save}
