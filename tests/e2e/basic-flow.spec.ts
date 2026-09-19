@@ -73,8 +73,8 @@ test.describe('HaloSanak E2E Suite', () => {
 		await page.getByRole('button', { name: 'Hapus & Ganti Data', exact: true }).click();
 		await expect(page.getByRole('dialog')).toHaveCount(0);
 		await page.waitForFunction(
-			() => 'serviceWorker' in navigator && (navigator.serviceWorker.controller !== null || Boolean(navigator.serviceWorker.ready)),
-			{ timeout: 5000 }
+			() => 'serviceWorker' in navigator && navigator.serviceWorker.controller !== null,
+			{ timeout: 10000 }
 		).catch(() => {});
 		await context.setOffline(true);
 		await page.reload();
