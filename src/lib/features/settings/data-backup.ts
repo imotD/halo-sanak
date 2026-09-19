@@ -1,5 +1,5 @@
 import { getDB } from '$lib/db';
-import { ExportFileSchema, type ExportFile } from '$lib/schemas';
+import { ExportFileSchema, CURRENT_BACKUP_VERSION, type ExportFile } from '$lib/schemas';
 import { stripReactivity } from '$lib/utils/clone';
 
 /**
@@ -7,15 +7,16 @@ import { stripReactivity } from '$lib/utils/clone';
  */
 export async function exportDatabaseToJSON(): Promise<{ filename: string; memberCount: number }> {
 	const db = getDB();
-	const members = await db.members.toArray();
-	const relationships = await db.relationships.toArray();
+	const [members, relationships] = await db.transaction('r', db.members, db.relationships, () =>
+		Promise.all([db.members.toArray(), db.relationships.toArray()])
+	);
 
 	const dateStr = new Date().toISOString().split('T')[0];
 	const filename = `halosanak-${dateStr}.json`;
 
 	const payload: ExportFile = {
 		app: 'halosanak',
-		version: 1,
+		version: CURRENT_BACKUP_VERSION,
 		exportedAt: new Date().toISOString(),
 		members,
 		relationships
@@ -65,8 +66,9 @@ export async function replaceDatabaseWithSnapshot(snapshot: ExportFile): Promise
 	const db = getDB();
 
 	// Bersihkan seluruh Svelte 5 reactive proxy dan field undefined agar aman di IndexedDB Structured Clone
-	const cleanMembers = stripReactivity(snapshot.members);
-	const cleanRelationships = stripReactivity(snapshot.relationships);
+	const validated = ExportFileSchema.parse(stripReactivity(snapshot));
+	const cleanMembers = validated.members;
+	const cleanRelationships = validated.relationships;
 
 	await db.transaction('rw', db.members, db.relationships, async () => {
 		// Hapus seluruh data lama

@@ -3,6 +3,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Badge from '$lib/components/Badge.svelte';
 	import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
+	import KinshipModal from './KinshipModal.svelte';
 	import type { Member, Relationship } from '$lib/schemas';
 	import { calculateAge } from '$lib/domain/age';
 	import { canDeleteMember } from '$lib/domain/relations';
@@ -22,30 +23,49 @@
 
 	let currentMember = $state<Member | null>(null);
 	let relationships = $state<Relationship[]>([]);
+	let allRelationships = $state<Relationship[]>([]);
 	let allMembers = $state<Member[]>([]);
 
 	let showDeleteConfirm = $state(false);
 	let deleteErrorMessage = $state<string | null>(null);
+	// Photo preview state
+	let showPhotoPreview = $state(false);
+	// Kinship calculator modal state (PRD v2 §1.7)
+	let showKinshipModal = $state(false);
+
+	let isLoading = $state(false);
+	let loadError = $state<string | null>(null);
+	let loadVersion = 0;
 
 	$effect(() => {
-		if (open && memberId) {
-			loadMemberData(memberId);
-		}
+		const version = ++loadVersion;
+		currentMember = null;
+		showKinshipModal = false;
+		showPhotoPreview = false;
+		showDeleteConfirm = false;
+		if (open && memberId) void loadMemberData(memberId, version);
+		return () => { loadVersion++; };
 	});
 
-	async function loadMemberData(id: string) {
+	async function loadMemberData(id: string, version: number) {
+		isLoading = true;
+		loadError = null;
 		try {
-			const member = await MemberRepository.getMemberById(id);
-			if (member) {
-				currentMember = member;
-				relationships = await MemberRepository.getMemberRelationships(id);
-				allMembers = await MemberRepository.getAllMembers();
-			} else {
-				currentMember = null;
-			}
+			const [member, rels, people] = await Promise.all([
+				MemberRepository.getMemberById(id),
+				MemberRepository.getAllRelationships(),
+				MemberRepository.getAllMembers()
+			]);
+			if (version !== loadVersion) return;
+			currentMember = member ?? null;
+			allRelationships = rels;
+			relationships = rels.filter((rel) => rel.fromMemberId === id || rel.toMemberId === id);
+			allMembers = people;
 			deleteErrorMessage = null;
-		} catch (err) {
-			console.error(err);
+		} catch {
+			if (version === loadVersion) loadError = UI_STRINGS.errors.loadFailed;
+		} finally {
+			if (version === loadVersion) isLoading = false;
 		}
 	}
 
@@ -133,13 +153,30 @@
 
 			<!-- Urutan PRD §8.3: 1. Foto/inisial dan nama -->
 			<div class="flex items-center gap-4">
-				<Avatar
-					name={currentMember.fullName}
-					gender={currentMember.gender}
-					photoUrl={currentMember.photoUrl}
-					isDeceased={currentMember.isDeceased}
-					size="lg"
-				/>
+				                    {#if currentMember.photoUrl}
+				                        <button
+				                            type="button"
+				                            class="rounded-full shrink-0 cursor-pointer"
+				                            onclick={() => (showPhotoPreview = true)}
+				                            aria-label="Pratinjau Foto"
+				                        >
+				                            <Avatar
+				                                name={currentMember.fullName}
+				                                gender={currentMember.gender}
+				                                photoUrl={currentMember.photoUrl}
+				                                isDeceased={currentMember.isDeceased}
+				                                size="lg"
+				                            />
+				                        </button>
+				                    {:else}
+				                        <Avatar
+				                            name={currentMember.fullName}
+				                            gender={currentMember.gender}
+				                            photoUrl={currentMember.photoUrl}
+				                            isDeceased={currentMember.isDeceased}
+				                            size="lg"
+				                        />
+				                    {/if}
 				<div class="flex-1 min-w-0">
 					<h2 class="text-xl md:text-2xl font-extrabold text-text-primary truncate">
 						{currentMember.fullName}
@@ -161,6 +198,15 @@
 						{/if}
 					</div>
 				</div>
+
+				<!-- Tombol Hitung Hubungan (PRD v2 §1.7) -->
+				<button
+					type="button"
+					class="shrink-0 px-3 py-1.5 text-xs font-semibold rounded-md border border-blue-primary text-blue-primary hover:bg-blue-primary hover:text-white transition-colors cursor-pointer"
+					onclick={() => (showKinshipModal = true)}
+				>
+					{UI_STRINGS.kinship.calculateKinshipBtn}
+				</button>
 			</div>
 
 			<!-- 3. Data Dasar (Tanggal Lahir, Usia, Pekerjaan) -->
@@ -308,9 +354,9 @@
 				</div>
 			</div>
 		</div>
-	{/if}
+	        {/if}
 
-	{#snippet actions()}
+	        {#snippet actions()}
 		<div class="flex items-center justify-between w-full">
 			<button
 				type="button"
@@ -327,7 +373,12 @@
 				>
 					{UI_STRINGS.common.close}
 				</button>
-				{#if currentMember}
+	{#if isLoading}
+		<p role="status">{UI_STRINGS.common.loading}</p>
+	{:else if loadError}
+		<p role="alert">{loadError}</p>
+	{:else if currentMember}
+
 					<button
 						type="button"
 						class="px-4 py-2 text-xs font-semibold rounded-md bg-blue-primary text-white hover:bg-blue-primary-hover transition-colors"
@@ -341,6 +392,15 @@
 	{/snippet}
 </Modal>
 
+<!-- Photo preview modal -->
+<Modal open={showPhotoPreview} title={currentMember?.fullName ? 'Preview: ' + currentMember.fullName : 'Pratinjau Foto'} maxWidth="max-w-2xl" onclose={() => (showPhotoPreview = false)}>
+	{#if currentMember?.photoUrl}
+		<div class="flex items-center justify-center">
+			<img src={currentMember.photoUrl} alt={currentMember.fullName} class="max-h-[80vh] w-auto h-auto rounded-md object-contain" />
+		</div>
+	{/if}
+</Modal>
+
 <!-- Konfirmasi Hapus Anggota Bebas Relasi -->
 <ConfirmDialog
 	open={showDeleteConfirm}
@@ -352,3 +412,14 @@
 	onconfirm={confirmDelete}
 	oncancel={() => (showDeleteConfirm = false)}
 />
+
+<!-- Modal Hitung Hubungan Kekerabatan (PRD v2 §1.7) -->
+{#if currentMember && showKinshipModal}
+	<KinshipModal
+		open={showKinshipModal}
+		memberA={currentMember}
+		{allMembers}
+		relationships={allRelationships}
+		onclose={() => (showKinshipModal = false)}
+	/>
+{/if}
