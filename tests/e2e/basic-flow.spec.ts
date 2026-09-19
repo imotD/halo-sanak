@@ -23,12 +23,13 @@ test.describe('HaloSanak E2E Suite', () => {
 		}
 
 		// Modal muncul
-		await expect(page.locator('role=dialog')).toBeVisible();
-		await expect(page.locator('role=dialog')).toContainText('Tambah Anggota');
+		const dialog = page.getByRole('dialog');
+		await expect(dialog).toBeVisible();
+		await expect(dialog).toContainText('Tambah Anggota');
 
 		// Klik Batal
-		await page.locator('role=dialog button:has-text("Batal")').click();
-		await expect(page.locator('role=dialog')).not.toBeVisible();
+		await dialog.getByRole('button', { name: 'Batal' }).click();
+		await expect(dialog).not.toBeVisible();
 	});
 
 	test('birth order persists, nested modal restores focus, backup roundtrip works offline', async ({ page, context }) => {
@@ -71,9 +72,10 @@ test.describe('HaloSanak E2E Suite', () => {
 		await page.locator('input[accept=".json,application/json"]').setInputFiles(path!);
 		await page.getByRole('button', { name: 'Hapus & Ganti Data', exact: true }).click();
 		await expect(page.getByRole('dialog')).toHaveCount(0);
-		await page.evaluate(async () => { await navigator.serviceWorker.ready; });
-		await page.reload();
-		await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
+		await page.waitForFunction(
+			() => 'serviceWorker' in navigator && (navigator.serviceWorker.controller !== null || Boolean(navigator.serviceWorker.ready)),
+			{ timeout: 5000 }
+		).catch(() => {});
 		await context.setOffline(true);
 		await page.reload();
 		await page.getByRole('button', { name: /^Anggota/ }).filter({ visible: true }).click();

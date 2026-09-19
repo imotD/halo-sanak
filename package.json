@@ -20,6 +20,7 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"@types/d3-selection": "^3.0.11",
 		"@types/d3-zoom": "^3.0.8",
+		"@types/node": "^26.6.1",
 		"daisyui": "^5.7.37",
 		"fake-indexeddb": "^6.2.5",
 		"svelte": "^5.56.1",
