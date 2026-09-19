@@ -1,6 +1,6 @@
 import { getDB } from './index';
-import type { Member, Relationship } from '$lib/schemas';
-import { createSymmetricSpousePairs, detectAncestorCycle, canDeleteMember } from '$lib/domain';
+import { ExportFileSchema, CURRENT_BACKUP_VERSION, type Member, type Relationship } from '$lib/schemas';
+import { createSymmetricSpousePairs, canDeleteMember } from '$lib/domain';
 import { stripReactivity } from '$lib/utils/clone';
 
 export class MemberRepository {
@@ -36,21 +36,8 @@ export class MemberRepository {
 		}
 	): Promise<string> {
 		const db = getDB();
-		const allRels = await db.relationships.toArray();
 		const memberId = memberData.id || crypto.randomUUID();
 		const now = Date.now();
-
-		// Cek cycle leluhur jika ada ayah/ibu
-		if (relations.fatherId) {
-			if (detectAncestorCycle(relations.fatherId, memberId, allRels)) {
-				throw new Error('Relasi ditolak: siklus leluhur terdeteksi untuk Ayah.');
-			}
-		}
-		if (relations.motherId) {
-			if (detectAncestorCycle(relations.motherId, memberId, allRels)) {
-				throw new Error('Relasi ditolak: siklus leluhur terdeteksi untuk Ibu.');
-			}
-		}
 
 		await db.transaction('rw', db.members, db.relationships, async () => {
 			const existingMember = await db.members.get(memberId);
@@ -127,6 +114,10 @@ export class MemberRepository {
 					}));
 				}
 			}
+			ExportFileSchema.parse({
+				app: 'halosanak', version: CURRENT_BACKUP_VERSION, exportedAt: new Date().toISOString(),
+				members: await db.members.toArray(), relationships: await db.relationships.toArray()
+			});
 		});
 
 		return memberId;
@@ -134,11 +125,12 @@ export class MemberRepository {
 
 	static async deleteMember(memberId: string): Promise<void> {
 		const db = getDB();
-		const allRels = await db.relationships.toArray();
-		const check = canDeleteMember(memberId, allRels);
-		if (!check.allowed) {
-			throw new Error('Anggota tidak dapat dihapus sebelum semua relasi dilepas.');
-		}
-		await db.members.delete(memberId);
+		await db.transaction('rw', db.members, db.relationships, async () => {
+			const check = canDeleteMember(memberId, await db.relationships.toArray());
+			if (!check.allowed) {
+				throw new Error('Anggota tidak dapat dihapus sebelum semua relasi dilepas.');
+			}
+			await db.members.delete(memberId);
+		});
 	}
 }

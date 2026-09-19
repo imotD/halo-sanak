@@ -8,6 +8,8 @@
 	import FamilyTree from '$lib/features/tree/FamilyTree.svelte';
 	import { MemberRepository } from '$lib/db/member-repository';
 	import { requestPersistentStorage } from '$lib/features/settings/storage';
+	import { getUpcomingEvents } from '$lib/domain/reminders';
+	import { notifyTodayEvents, isNotificationEnabled } from '$lib/services/notifications';
 	import type { Member, Relationship } from '$lib/schemas';
 	import { UI_STRINGS } from '$lib/strings';
 
@@ -28,18 +30,40 @@
 	// Feedback toast
 	let toastMessage = $state<string | null>(null);
 
-	async function refreshData() {
+	let loadVersion = 0;
+	let isLoading = $state(true);
+	let loadError = $state<string | null>(null);
+
+	let hasInitialLoaded = false;
+
+	async function refreshData(silent = false) {
+		const version = ++loadVersion;
+		if (!silent || !hasInitialLoaded) {
+			isLoading = true;
+		}
+		loadError = null;
 		try {
-			members = await MemberRepository.getAllMembers();
-			relationships = await MemberRepository.getAllRelationships();
-		} catch (err) {
-			console.error(err);
+			const [people, rels] = await Promise.all([
+				MemberRepository.getAllMembers(), MemberRepository.getAllRelationships()
+			]);
+			if (version !== loadVersion) return;
+			members = people;
+			relationships = rels;
+			hasInitialLoaded = true;
+			if (isNotificationEnabled()) void notifyTodayEvents(getUpcomingEvents(people, new Date(), 7));
+		} catch {
+			if (version === loadVersion && !hasInitialLoaded) loadError = UI_STRINGS.errors.loadFailed;
+		} finally {
+			if (version === loadVersion) isLoading = false;
 		}
 	}
 
 	onMount(() => {
-		refreshData();
-		requestPersistentStorage();
+		void refreshData();
+		void requestPersistentStorage();
+		const resume = () => { if (document.visibilityState === 'visible') void refreshData(true); };
+		document.addEventListener('visibilitychange', resume);
+		return () => { loadVersion++; document.removeEventListener('visibilitychange', resume); };
 	});
 
 	function showToast(msg: string) {
@@ -132,7 +156,11 @@
 
 	<!-- Main Content Area -->
 	<main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 pb-24 md:pb-8">
-		{#if currentTab === 'members'}
+		{#if isLoading}
+			<p role="status">{UI_STRINGS.common.loading}</p>
+		{:else if loadError}
+			<p role="alert">{loadError}</p>
+		{:else if currentTab === 'members'}
 			<MemberList
 				{members}
 				onselectmember={openDetail}
