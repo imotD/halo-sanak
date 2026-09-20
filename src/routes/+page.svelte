@@ -1,4 +1,5 @@
 <script lang="ts">
+    import.meta.env.VITE_APP_ENV
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
@@ -22,6 +23,8 @@
 	// State Modal Detail & Form & Settings
 	let selectedMemberId = $state<string | undefined>(undefined);
 	let showDetailModal = $state(false);
+
+	const isDev = dev && import.meta.env.VITE_APP_ENV === 'dev';
 
 	let showFormModal = $state(false);
 	let memberToEdit = $state<Member | undefined>(undefined);
@@ -104,7 +107,7 @@
 				>
 					{UI_STRINGS.appName}
 				</button>
-				{#if dev}
+				{#if isDev}
 					<span class="badge badge-warning badge-xs">DEV</span>
 				{/if}
 			</div>
