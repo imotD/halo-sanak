@@ -1,7 +1,5 @@
 <script lang="ts">
-    import.meta.env.VITE_APP_ENV
 	import { onMount } from 'svelte';
-	import { dev } from '$app/environment';
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 	import MemberList from '$lib/features/members/MemberList.svelte';
 	import MemberFormModal from '$lib/features/member-form/MemberFormModal.svelte';
@@ -24,7 +22,9 @@
 	let selectedMemberId = $state<string | undefined>(undefined);
 	let showDetailModal = $state(false);
 
-	const isDev = dev && import.meta.env.VITE_APP_ENV === 'dev';
+	// Badge 'PREVIEW' muncul di Cloudflare Preview, tersembunyi di Production.
+	// Set VITE_APP_ENV=preview di Cloudflare Pages → Environment Variables → Preview.
+	const isPreview = import.meta.env.VITE_APP_ENV === 'preview';
 
 	let showFormModal = $state(false);
 	let memberToEdit = $state<Member | undefined>(undefined);
@@ -107,7 +107,7 @@
 				>
 					{UI_STRINGS.appName}
 				</button>
-				{#if isDev}
+				{#if isPreview}
 					<span class="badge badge-warning badge-xs">DEV</span>
 				{/if}
 			</div>
